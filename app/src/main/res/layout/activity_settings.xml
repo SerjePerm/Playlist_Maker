@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvGoBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/medium_padding"
+        android:paddingHorizontal="@dimen/medium_padding"
+        android:paddingTop="@dimen/medium_padding"
+        android:paddingBottom="32dp"
+        android:text="@string/settings"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_text_size"
+        android:foreground="?attr/selectableItemBackground"
+        app:drawableStartCompat="@drawable/arrow_back" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/big_padding"
+        android:paddingVertical="@dimen/biggest_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dark_theme"
+            android:textColor="@color/black"
+            android:textSize="@dimen/items_text_size" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/big_padding"
+        android:paddingVertical="@dimen/biggest_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share_app"
+            android:textColor="@color/black"
+            android:textSize="@dimen/items_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:contentDescription="@string/share_app"
+            android:src="@drawable/share"
+            app:tint="@color/gray" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/big_padding"
+        android:paddingVertical="@dimen/biggest_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/write_to_support"
+            android:textColor="@color/black"
+            android:textSize="@dimen/items_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:contentDescription="@string/write_to_support"
+            android:src="@drawable/support"
+            app:tint="@color/gray" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/big_padding"
+        android:paddingVertical="@dimen/biggest_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_license"
+            android:textColor="@color/black"
+            android:textSize="@dimen/items_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:contentDescription="@string/user_license"
+            android:src="@drawable/arrow_forward"
+            app:tint="@color/gray" />
+
+    </FrameLayout>
+
+</LinearLayout>
