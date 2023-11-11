@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="mainActivityButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginHorizontal">@dimen/big_padding</item>
+        <item name="android:layout_marginTop">@dimen/smallest_padding</item>
+        <item name="android:layout_marginBottom">@dimen/big_padding</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:textFontWeight">@integer/text_weight_500</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/icon_padding</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="titleWithBack">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/medium_padding</item>
+        <item name="android:paddingHorizontal">@dimen/medium_padding</item>
+        <item name="android:paddingTop">@dimen/small_padding</item>
+        <item name="android:paddingBottom">@dimen/medium_padding</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:textFontWeight">@integer/text_weight_500</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="drawableStartCompat">@drawable/arrow_back</item>
+    </style>
+
+    <style name="settingsTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--
+        <item name="android:textColor">@color/black</item>
+        -->
+        <item name="android:textSize">@dimen/items_text_size</item>
+        <item name="android:textFontWeight">@integer/text_weight_400</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="settingsImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
+        <!--
+        <item name="tint">@color/gray</item>
+        -->
+    </style>
+
+    <style name="settingsFrameLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">@dimen/big_padding</item>
+        <item name="android:paddingVertical">@dimen/biggest_padding</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+</resources>
