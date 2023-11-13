@@ -22,36 +22,31 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:orientation="horizontal"
-        android:background="@drawable/rounded_shape">
+        style="@style/searchField">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/search"/>
+            android:src="@drawable/search"
+            style="@style/searchFieldImages"/>
 
         <EditText
-            android:id="@+id/etSearchText"
+            android:id="@+id/etSearch"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:hint="@string/search"
             android:inputType="text"
             android:lines="1"
+            android:textColor="@color/lightBlack"
             android:background="@android:color/transparent"
-            />
+            style="@style/searchEditText"/>
 
         <ImageView
             android:id="@+id/ivClear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:visibility="visible" />
+            android:visibility="gone"
+            style="@style/searchFieldImages"/>
 
     </LinearLayout>
 
