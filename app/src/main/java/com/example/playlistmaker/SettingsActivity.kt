@@ -22,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         val frameUserLicense = findViewById<FrameLayout>(R.id.frameUserLicense)
         val frameDarkTheme = findViewById<FrameLayout>(R.id.frameDarkTheme)
         val switchDark = findViewById<Switch>(R.id.switchDark)
-        if (isDarkTheme()) switchDark.isChecked = true
+        switchDark.isChecked = isDarkTheme()
         // GoBack button
         tvGoBack.setOnClickListener { finish() }
         // DarkTheme button

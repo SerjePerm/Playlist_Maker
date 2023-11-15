@@ -10,45 +10,40 @@
 
     <TextView
         android:id="@+id/tvGoBack"
-        style="@style/titleWithBack"
-        android:text="@string/search" />
+        android:text="@string/search"
+        style="@style/titleWithBack" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"/>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         style="@style/searchField">
 
         <ImageView
             android:layout_marginEnd="8dp"
             android:src="@drawable/search"
+            android:layout_gravity="start|center_vertical"
             style="@style/searchFieldImages"/>
 
         <EditText
             android:id="@+id/etSearch"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="1"
+            android:layout_marginStart="36dp"
             android:hint="@string/search"
-            android:inputType="text"
-            android:lines="1"
-            android:textColor="@color/lightBlack"
-            android:background="@android:color/transparent"
             style="@style/searchEditText"/>
 
         <ImageView
             android:id="@+id/ivClear"
             android:layout_marginEnd="12dp"
+            android:layout_gravity="end|center_vertical"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:visibility="gone"
             style="@style/searchFieldImages"/>
 
-    </LinearLayout>
+    </FrameLayout>
 
 
 </LinearLayout>

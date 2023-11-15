@@ -80,6 +80,10 @@
 
     <style name="searchEditText">
         <item name="android:textColorHint">@color/lightBlack</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>
