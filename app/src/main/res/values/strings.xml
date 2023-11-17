@@ -9,4 +9,10 @@
     <string name="user_license">Пользовательское соглашение</string>
     <string name="search_activity">Search activity</string>
     <string name="mediateka_activity">Mediateka activity</string>
+    <!-- strings for support contact e-mail, user license and share btn -->
+    <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
+    <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="support_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="user_license_URL">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="share_text">Для ознакомления с курсом Андроид-разработка от Яндекс Практикум перейдите по ссылке https://practicum.yandex.ru/android-developer/?from=catalog</string>
 </resources>
