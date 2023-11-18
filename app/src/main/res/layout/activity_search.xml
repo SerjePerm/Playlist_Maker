@@ -24,14 +24,11 @@
             android:layout_marginEnd="8dp"
             android:src="@drawable/search"
             android:layout_gravity="start|center_vertical"
+            android:contentDescription="@string/search"
             style="@style/searchFieldImages"/>
 
         <EditText
             android:id="@+id/etSearch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginStart="36dp"
             android:hint="@string/search"
             style="@style/searchEditText"/>
 
@@ -40,10 +37,16 @@
             android:layout_marginEnd="12dp"
             android:layout_gravity="end|center_vertical"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:visibility="gone"
+            android:visibility="visible"
             style="@style/searchFieldImages"/>
 
     </FrameLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTracksSearch"
+        android:layout_marginTop="@dimen/big_padding"
+        tools:listitem="@layout/track_item"
+        tools:itemCount="5"
+        style="@style/recyclerViewStyle"/>
 
 </LinearLayout>
