@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivCover"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginVertical="@dimen/margin8"
+        android:layout_marginStart="13dp"
+        android:src="@drawable/mediateka" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTrackName"
+            style="@style/searchTrackFirstTitle"
+            tools:text="Track name" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvArtistName"
+                style="@style/searchTrackSecondTitle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/margin8"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Artist Name" />
+
+            <ImageView
+                android:id="@+id/ivDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/ic" />
+
+            <TextView
+                android:id="@+id/tvTrackTime"
+                style="@style/searchTrackSecondTitle"
+                android:layout_width="wrap_content"
+                tools:text="Track time" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        style="@style/settingsImageView"
+        android:layout_gravity="top"
+        android:layout_marginTop="@dimen/margin18"
+        android:layout_marginEnd="@dimen/margin12"
+        android:src="@drawable/arrow_forward" />
+
+</LinearLayout>

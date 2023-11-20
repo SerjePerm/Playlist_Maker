@@ -12,6 +12,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.adapters.TrackAdapter
+import com.example.playlistmaker.data.mock_data
 
 class SearchActivity : AppCompatActivity() {
 
@@ -22,6 +25,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         //view val
+        val rvTracksSearch = findViewById<RecyclerView>(R.id.rvTracksSearch)
         val tvGoBack = findViewById<TextView>(R.id.tvGoBack)
         val ivClear = findViewById<ImageView>(R.id.ivClear)
         etSearch = findViewById<EditText>(R.id.etSearch)
@@ -43,6 +47,9 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         etSearch.addTextChangedListener(textWatcher)
+        //Recycler view
+        val trackAdapter = TrackAdapter(mock_data)
+        rvTracksSearch.adapter = trackAdapter
     }
 
     override fun onRestoreInstanceState(
