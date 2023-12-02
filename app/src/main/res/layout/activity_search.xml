@@ -42,11 +42,65 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTracksSearch"
-        android:layout_marginTop="@dimen/big_padding"
-        tools:listitem="@layout/track_item"
-        tools:itemCount="5"
-        style="@style/recyclerViewStyle"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTracksSearch"
+            android:layout_marginTop="@dimen/big_padding"
+            tools:listitem="@layout/track_item"
+            tools:itemCount="1"
+            style="@style/recyclerViewStyle"/>
+
+        <LinearLayout
+            android:id="@+id/lrPlaceHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="102dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center">
+
+
+                <ImageView
+                    android:layout_marginTop="3dp"
+                    android:layout_marginStart="9dp"
+                    android:src="@drawable/music_key_1"
+                    style="@style/placeHolderImage"/>
+
+                <ImageView
+                    android:id="@+id/ivPlaceHolder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="37dp"
+                    android:src="@drawable/no_internet"
+                    android:background="#00FFFFFF"/>
+
+                <ImageView
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="80dp"
+                    android:src="@drawable/music_key_2"
+                    style="@style/placeHolderImage"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvPlaceHolder"
+                style="@style/placeHolderText"/>
+
+            <Button
+                android:id="@+id/btnRefresh"
+                style="@style/refreshInternetButton"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>
