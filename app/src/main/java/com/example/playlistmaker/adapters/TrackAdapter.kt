@@ -11,19 +11,21 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.Track
 import com.example.playlistmaker.utils.dpToPx
+import com.example.playlistmaker.utils.msToTime
 
-class TrackAdapter(private val data: ArrayList<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
+
+    var tracks = ArrayList<Track>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
         return TrackViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount(): Int = tracks.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(tracks[position])
     }
 
 }
@@ -38,7 +40,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         tvTrackName.text = track.trackName
         tvArtistName.text = track.artistName
-        tvTrackTime.text = track.trackTime
+        tvTrackTime.text = msToTime(track.trackTimeMillis)
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder)

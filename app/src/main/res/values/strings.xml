@@ -15,4 +15,8 @@
     <string name="support_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="user_license_URL">https://yandex.ru/legal/practicum_offer/</string>
     <string name="share_text">Для ознакомления с курсом Андроид-разработка от Яндекс Практикум перейдите по ссылке https://practicum.yandex.ru/android-developer/?from=catalog</string>
+    <!-- Strings for placeholders no internet / no results in search activity -->
+    <string name="no_results">Ничего не нашлось</string>
+    <string name="no_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="refresh">Обновить</string>
 </resources>
