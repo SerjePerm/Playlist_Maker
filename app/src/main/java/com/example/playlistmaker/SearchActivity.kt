@@ -32,7 +32,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText = ""
     private lateinit var etSearch: EditText
-    private var trackList = ArrayList<Track>()
+    private val trackList = ArrayList<Track>()
     private val trackAdapter = TrackAdapter()
     //placeholder
     private lateinit var lrPlaceHolder: LinearLayout
@@ -85,13 +85,13 @@ class SearchActivity : AppCompatActivity() {
         //EditText -> ActionDone
         etSearch.setOnEditorActionListener{ _, actionId: Int, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (etSearch.text.isNotEmpty()) search()
+                if (etSearch.text.isNotEmpty()) search(etSearch.text.toString())
             }
             false
         }
         //No internet / refresh button
         btnRefresh.setOnClickListener {
-            search()
+            search(etSearch.text.toString())
         }
         //Recycler view
         trackAdapter.tracks = trackList
@@ -112,14 +112,15 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(searchField, searchText)
     }
 
-    private fun search() {
-        iTunesService.findTrack(etSearch.text.toString()).enqueue(object : Callback<TracksResponse> {
+    private fun search(text: String) {
+        iTunesService.findTrack(text).enqueue(object : Callback<TracksResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
                 if (response.code() == 200) {
                     trackList.clear()
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        trackList.addAll(response.body()?.results!!)
+                    val results = response.body()?.results
+                    if (results?.isNotEmpty() == true) {
+                        trackList.addAll(results)
                         trackAdapter.notifyDataSetChanged()
                         showPlaceHolder(PlaceHolderType.GOOD)
                     }
