@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SearchActivity">
+    tools:context=".activities.SearchActivity">
 
 
     <TextView
@@ -21,15 +21,17 @@
         style="@style/searchField">
 
         <ImageView
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/search"
             android:layout_gravity="start|center_vertical"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/search"
+            android:src="@drawable/search"
+            tools:ignore="ImageContrastCheck"
             style="@style/searchFieldImages"/>
 
         <EditText
             android:id="@+id/etSearch"
             android:hint="@string/search"
+            tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck"
             style="@style/searchEditText"/>
 
         <ImageView
@@ -38,9 +40,44 @@
             android:layout_gravity="end|center_vertical"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:visibility="gone"
+            android:contentDescription="@string/clear_search"
             style="@style/searchFieldImages"/>
 
     </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/lrSearchHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin24"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/searchHistoryTitle"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:reverseLayout="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/track_item"
+            tools:itemCount="1"/>
+
+        <Button
+            android:id="@+id/btnClearHistory"
+            android:text="@string/clear_history"
+            android:layout_marginBottom="60dp"
+            style="@style/refreshInternetButton"/>
+
+    </LinearLayout>
+
+    </ScrollView>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -72,7 +109,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/music_key_1"
-                    style="@style/placeHolderImage"/>
+                    style="@style/placeHolderImage"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/ivPlaceHolder"
@@ -81,13 +119,15 @@
                     android:layout_marginTop="28dp"
                     android:layout_marginStart="38dp"
                     android:src="@drawable/no_internet"
-                    android:background="#00FFFFFF"/>
+                    android:background="#00FFFFFF"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:layout_marginTop="6dp"
                     android:layout_marginStart="80dp"
                     android:src="@drawable/music_key_2"
-                    style="@style/placeHolderImage"/>
+                    style="@style/placeHolderImage"
+                    tools:ignore="ContentDescription" />
 
             </FrameLayout>
 
@@ -97,6 +137,7 @@
 
             <Button
                 android:id="@+id/btnRefresh"
+                android:text="@string/refresh"
                 style="@style/refreshInternetButton"/>
 
         </LinearLayout>

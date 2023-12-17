@@ -1,15 +1,14 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.activities
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,18 +19,14 @@ class SettingsActivity : AppCompatActivity() {
         val frameShareApp = findViewById<FrameLayout>(R.id.frameShareApp)
         val frameSupportContact = findViewById<FrameLayout>(R.id.frameSupportContact)
         val frameUserLicense = findViewById<FrameLayout>(R.id.frameUserLicense)
-        val frameDarkTheme = findViewById<FrameLayout>(R.id.frameDarkTheme)
-        val switchDark = findViewById<Switch>(R.id.switchDark)
-        switchDark.isChecked = isDarkTheme()
+        val switchDarkTheme = findViewById<SwitchMaterial>(R.id.switchDarkTheme)
         // GoBack button
         tvGoBack.setOnClickListener { finish() }
-        // DarkTheme button
-        val darkThemeListener = View.OnClickListener {
-            if (isDarkTheme()) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        // DarkTheme switch
+        switchDarkTheme.isChecked = (applicationContext as App).isDarkTheme
+        switchDarkTheme.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
-        frameDarkTheme.setOnClickListener(darkThemeListener)
-        switchDark.setOnClickListener(darkThemeListener)
         // ShareApp button
         frameShareApp.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
@@ -55,7 +50,4 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun isDarkTheme(): Boolean {
-        return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-    }
 }
