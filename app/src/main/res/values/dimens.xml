@@ -8,6 +8,7 @@
     <dimen name="margin14">14dp</dimen>
     <dimen name="margin16">16dp</dimen>
     <dimen name="margin18">18dp</dimen>
+    <dimen name="margin24">24dp</dimen>
     <!-- Padding -->
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="smallest_padding">4dp</dimen>
