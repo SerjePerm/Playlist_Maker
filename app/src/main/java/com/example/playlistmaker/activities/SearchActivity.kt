@@ -45,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
     private val trackList = ArrayList<Track>()
     private lateinit var trackAdapter: TrackAdapter
     //for search history
-    private lateinit var searchHistoryAdapter: SearchHistoryAdapter
+    //private lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
     //placeholder
     private lateinit var lrPlaceHolder: LinearLayout
@@ -107,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clearHistory()
             lrSearchHistory.visibility = View.GONE
         }
-        searchHistoryAdapter = SearchHistoryAdapter {
+        val searchHistoryAdapter = SearchHistoryAdapter {
             val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
             intent.putExtra(trackExtra, it)
             startActivity(intent)
