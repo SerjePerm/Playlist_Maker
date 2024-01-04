@@ -164,4 +164,29 @@
         <item name="android:text">@string/search_history_title</item>
     </style>
 
+    <style name="playerTitles">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">@integer/text_weight_400</item>
+    </style>
+
+    <style name="playerValues">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">@integer/text_weight_400</item>
+    </style>
+
+    <style name="backAndPlayButton">
+        <item name="tint">@color/lightBlack</item>
+    </style>
+
+    <style name="addAndFavButton">
+        <item name="android:background">@drawable/round_button_gray</item>
+    </style>
+
 </resources>

@@ -2,6 +2,7 @@ package com.example.playlistmaker.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
@@ -44,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
     private val trackList = ArrayList<Track>()
     private lateinit var trackAdapter: TrackAdapter
     //for search history
-    private val searchHistoryAdapter = SearchHistoryAdapter()
+    //private lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
     //placeholder
     private lateinit var lrPlaceHolder: LinearLayout
@@ -106,6 +107,11 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clearHistory()
             lrSearchHistory.visibility = View.GONE
         }
+        val searchHistoryAdapter = SearchHistoryAdapter {
+            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            intent.putExtra(trackExtra, it)
+            startActivity(intent)
+        }
         searchHistoryAdapter.searchHistoryTracks = searchHistory.loadHistory()
         rvSearchHistory.adapter = searchHistoryAdapter
         //Search history observer
@@ -117,7 +123,12 @@ class SearchActivity : AppCompatActivity() {
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
         //Recycler view search results
-        trackAdapter = TrackAdapter { searchHistory.saveToHistory(it) }
+        trackAdapter = TrackAdapter {
+            searchHistory.saveToHistory(it)
+            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            intent.putExtra(trackExtra, it)
+            startActivity(intent)
+        }
         trackAdapter.tracks = trackList
         rvTracksSearch.adapter = trackAdapter
         //TextWatcher and setOnFocusChangeListener for etSearchText
@@ -216,6 +227,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val searchField = "SEARCH_FIELD"
         const val searchFieldDefault = ""
+        const val trackExtra = "TRACK_EXTRA"
     }
 
 }

@@ -12,7 +12,19 @@
     <string name="user_license">Пользовательское соглашение</string>
     <string name="search_activity">Search activity</string>
     <string name="mediateka_activity">Mediateka activity</string>
-        <!-- strings for support contact e-mail, user license and share btn -->
+    <!-- strings for player activity -->
+    <string name="back">Назад</string>
+    <string name="play_pause">Играть / пауза</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="add_to_favorite">Добавить в избранное</string>
+    <string name="track_time">Длительность</string>
+    <string name="collection">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="track_poster">Обложка трека</string>
+    <string name="zero_time">0:00</string>
+    <!-- strings for support contact e-mail, user license and share btn -->
     <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
     <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="support_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
@@ -22,5 +34,4 @@
     <string name="no_results">Ничего не нашлось</string>
     <string name="no_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
     <string name="refresh">Обновить</string>
-
 </resources>
