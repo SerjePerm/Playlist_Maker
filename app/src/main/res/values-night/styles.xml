@@ -146,4 +146,12 @@
         <item name="backgroundTint">@color/white</item>
     </style>
 
+    <style name="backAndPlayButton">
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="addAndFavButton">
+        <item name="android:background">@drawable/round_button_gray_dark</item>
+    </style>
+
 </resources>

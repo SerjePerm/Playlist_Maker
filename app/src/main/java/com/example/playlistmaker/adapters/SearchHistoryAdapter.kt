@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.Track
 
-class SearchHistoryAdapter : RecyclerView.Adapter<TrackViewHolder>() {
+class SearchHistoryAdapter(val onClick: (Track) -> Unit) : RecyclerView.Adapter<TrackViewHolder>() {
 
     var searchHistoryTracks = ArrayList<Track>()
 
@@ -19,7 +19,7 @@ class SearchHistoryAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(searchHistoryTracks[position])
-        holder.itemView.setOnClickListener { println(searchHistoryTracks[position]) }
+        holder.itemView.setOnClickListener { onClick(searchHistoryTracks[position]) }
     }
 
 }
