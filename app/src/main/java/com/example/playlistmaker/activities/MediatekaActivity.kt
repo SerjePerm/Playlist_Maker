@@ -1,12 +1,16 @@
 package com.example.playlistmaker.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.playlistmaker.R
+import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivityMediatekaBinding
 
 class MediatekaActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMediatekaBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mediateka)
+        binding = ActivityMediatekaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
