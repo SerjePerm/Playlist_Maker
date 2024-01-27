@@ -9,7 +9,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.Track
 import com.example.playlistmaker.utils.dpToPx
-import com.example.playlistmaker.utils.msToTime
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

@@ -13,20 +13,15 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.PREFERENCES_TITLE
 import com.example.playlistmaker.R
 import com.example.playlistmaker.SEARCH_HISTORY
 import com.example.playlistmaker.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.adapters.TrackAdapter
 import com.example.playlistmaker.data.Track
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.iTunes.ITunesApi
 import com.example.playlistmaker.iTunes.PlaceHolderType
 import com.example.playlistmaker.iTunes.TracksResponse
@@ -39,19 +34,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySearchBinding
     private var searchText = ""
-    private lateinit var etSearch: EditText
     //for search results
     private val trackList = ArrayList<Track>()
     private lateinit var trackAdapter: TrackAdapter
     //for search history
-    //private lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
-    //placeholder
-    private lateinit var lrPlaceHolder: LinearLayout
-    private lateinit var ivPlaceHolder: ImageView
-    private lateinit var tvPlaceHolder: TextView
-    private lateinit var btnRefresh: TextView
     //retrofit
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
@@ -64,56 +53,45 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        //view val
-        val rvTracksSearch = findViewById<RecyclerView>(R.id.rvTracksSearch)
-        val rvSearchHistory = findViewById<RecyclerView>(R.id.rvSearchHistory)
-        val tvGoBack = findViewById<TextView>(R.id.tvGoBack)
-        val ivClear = findViewById<ImageView>(R.id.ivClear)
-        val btnClearHistory = findViewById<Button>(R.id.btnClearHistory)
-        val lrSearchHistory = findViewById<LinearLayout>(R.id.lrSearchHistory)
-        etSearch = findViewById(R.id.etSearch)
-        //placeholder val
-        lrPlaceHolder = findViewById(R.id.lrPlaceHolder)
-        ivPlaceHolder = findViewById(R.id.ivPlaceHolder)
-        tvPlaceHolder = findViewById(R.id.tvPlaceHolder)
-        btnRefresh = findViewById(R.id.btnRefresh)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         // GoBack button
-        tvGoBack.setOnClickListener { finish() }
+        binding.tvGoBack.setOnClickListener { finish() }
         // Clear text button
-        ivClear.setOnClickListener {
+        binding.ivClear.setOnClickListener {
             showPlaceHolder(PlaceHolderType.GOOD)
-            etSearch.setText("")
+            binding.etSearch.setText("")
             trackList.clear()
             trackAdapter.notifyDataSetChanged()
             val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputManager?.hideSoftInputFromWindow(etSearch.windowToken, 0)
+            inputManager?.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
         }
         //EditText -> ActionDone
-        etSearch.setOnEditorActionListener{ _, actionId: Int, _ ->
+        binding.etSearch.setOnEditorActionListener{ _, actionId: Int, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (etSearch.text.isNotEmpty()) search(etSearch.text.toString())
+                if (binding.etSearch.text.isNotEmpty()) search(binding.etSearch.text.toString())
             }
             false
         }
         //No internet / refresh button
-        btnRefresh.setOnClickListener {
-            search(etSearch.text.toString())
+        binding.btnRefresh.setOnClickListener {
+            search(binding.etSearch.text.toString())
         }
         //Search history
         val sharedPreferences = getSharedPreferences(PREFERENCES_TITLE, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPreferences)
-        btnClearHistory.setOnClickListener {
+        binding.btnClearHistory.setOnClickListener {
             searchHistory.clearHistory()
-            lrSearchHistory.visibility = View.GONE
+            binding.lrSearchHistory.visibility = View.GONE
         }
         val searchHistoryAdapter = SearchHistoryAdapter {
+            searchHistory.saveToHistory(it)
             val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
             intent.putExtra(trackExtra, it)
             startActivity(intent)
         }
         searchHistoryAdapter.searchHistoryTracks = searchHistory.loadHistory()
-        rvSearchHistory.adapter = searchHistoryAdapter
+        binding.rvSearchHistory.adapter = searchHistoryAdapter
         //Search history observer
         listener = OnSharedPreferenceChangeListener { _: SharedPreferences, key: String? ->
             if (key == SEARCH_HISTORY) {
@@ -130,30 +108,30 @@ class SearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
         trackAdapter.tracks = trackList
-        rvTracksSearch.adapter = trackAdapter
+        binding.rvTracksSearch.adapter = trackAdapter
         //TextWatcher and setOnFocusChangeListener for etSearchText
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                ivClear.isVisible = s.isNullOrEmpty().not()
+                binding.ivClear.isVisible = s.isNullOrEmpty().not()
                 searchText = s.toString()
-                if (etSearch.hasFocus() && s?.isEmpty() == true && searchHistory.loadHistory().isNotEmpty()) {
-                    lrSearchHistory.visibility = View.VISIBLE
+                if (binding.etSearch.hasFocus() && s?.isEmpty() == true && searchHistory.loadHistory().isNotEmpty()) {
+                    binding.lrSearchHistory.visibility = View.VISIBLE
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                 }
-                else lrSearchHistory.visibility = View.GONE
+                else binding.lrSearchHistory.visibility = View.GONE
             }
         }
-        etSearch.addTextChangedListener(textWatcher)
-        etSearch.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && etSearch.text.isEmpty() && searchHistory.loadHistory().isNotEmpty()) {
-                lrSearchHistory.visibility = View.VISIBLE
+        binding.etSearch.addTextChangedListener(textWatcher)
+        binding.etSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && binding.etSearch.text.isEmpty() && searchHistory.loadHistory().isNotEmpty()) {
+                binding.lrSearchHistory.visibility = View.VISIBLE
                 trackList.clear()
                 trackAdapter.notifyDataSetChanged()
             }
-            else lrSearchHistory.visibility = View.GONE
+            else binding.lrSearchHistory.visibility = View.GONE
         }
     }
 
@@ -163,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
         searchText = savedInstanceState?.getString(searchField, searchFieldDefault) ?: ""
-        etSearch.setText(searchText)
+        binding.etSearch.setText(searchText)
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -207,19 +185,19 @@ class SearchActivity : AppCompatActivity() {
     private fun showPlaceHolder(type: PlaceHolderType) {
         when(type) {
             PlaceHolderType.GOOD -> {
-                lrPlaceHolder.visibility = View.GONE
+                binding.lrPlaceHolder.visibility = View.GONE
             }
             PlaceHolderType.NO_INTERNET -> {
-                ivPlaceHolder.setImageResource(R.drawable.no_internet)
-                tvPlaceHolder.text = getString(R.string.no_internet)
-                btnRefresh.visibility = View.VISIBLE
-                lrPlaceHolder.visibility = View.VISIBLE
+                binding.ivPlaceHolder.setImageResource(R.drawable.no_internet)
+                binding.tvPlaceHolder.text = getString(R.string.no_internet)
+                binding.btnRefresh.visibility = View.VISIBLE
+                binding.lrPlaceHolder.visibility = View.VISIBLE
             }
             PlaceHolderType.NO_RESULTS -> {
-                ivPlaceHolder.setImageResource(R.drawable.empty_search_smile)
-                tvPlaceHolder.text = getString(R.string.no_results)
-                btnRefresh.visibility = View.GONE
-                lrPlaceHolder.visibility = View.VISIBLE
+                binding.ivPlaceHolder.setImageResource(R.drawable.empty_search_smile)
+                binding.tvPlaceHolder.text = getString(R.string.no_results)
+                binding.btnRefresh.visibility = View.GONE
+                binding.lrPlaceHolder.visibility = View.VISIBLE
             }
         }
     }
