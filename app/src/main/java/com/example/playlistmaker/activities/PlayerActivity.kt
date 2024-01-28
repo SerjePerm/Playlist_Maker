@@ -40,11 +40,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.tvGenre.text = track.primaryGenreName
         binding.tvCountry.text = track.country
         //load poster
-        Glide.with(this)
-            .load(track.bigCoverUrl)
-            .placeholder(R.drawable.placeholder_big)
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(8, this)))
+        Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big).centerCrop().transform(RoundedCorners(dpToPx(8, this)))
             .into(binding.ivPoster)
         //media player
         preparePlayer(track.previewUrl)
@@ -71,7 +67,7 @@ class PlayerActivity : AppCompatActivity() {
         }
         mediaPlayer.setOnCompletionListener {
             binding.ivPlayButton.setImageResource(R.drawable.play)
-            binding.tvPlayTime.setText(R.string.zero_time)
+            binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
             playerState = STATE_PREPARED
         }
     }
@@ -111,10 +107,7 @@ class PlayerActivity : AppCompatActivity() {
         return object : Runnable {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
-                    binding.tvPlayTime.text = SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(mediaPlayer.currentPosition)
+                    binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
                     mainThreadHandler?.postDelayed(this, DELAY)
                 }
             }

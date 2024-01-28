@@ -44,6 +44,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     private var isClickAllowed = true
     private val searchRunnable = Runnable { search(binding.etSearch.text.toString()) }
+    private val clickRunnable = Runnable { isClickAllowed = true }
     //for search history
     private lateinit var listener: OnSharedPreferenceChangeListener
     //retrofit
@@ -143,6 +144,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+        handler.removeCallbacks(clickRunnable)
+    }
+
     override fun onRestoreInstanceState(
         savedInstanceState: Bundle?,
         persistentState: PersistableBundle?
@@ -166,7 +173,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
                 binding.progressBar.visibility = View.GONE
                 binding.rvTracksSearch.visibility = View.VISIBLE
-                if (response.code() == 200) {
+                if (response.isSuccessful) {
                     trackList.clear()
                     val results = response.body()?.results
                     if (results?.isNotEmpty() == true) {
@@ -188,6 +195,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                 trackList.clear()
                 trackAdapter.notifyDataSetChanged()
+                binding.progressBar.visibility = View.GONE
+                binding.rvTracksSearch.visibility = View.VISIBLE
                 showPlaceHolder(PlaceHolderType.NO_INTERNET)
                 Log.d(getString(R.string.app_name), "Failure: ${t.message}")
             }
@@ -219,7 +228,7 @@ class SearchActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed(clickRunnable, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
