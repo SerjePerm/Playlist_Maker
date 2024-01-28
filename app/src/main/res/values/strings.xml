@@ -23,7 +23,7 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="track_poster">Обложка трека</string>
-    <string name="zero_time">0:00</string>
+    <string name="zero_time">00:00</string>
     <!-- strings for support contact e-mail, user license and share btn -->
     <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
     <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>

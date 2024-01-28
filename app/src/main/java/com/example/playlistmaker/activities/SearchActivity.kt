@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,11 +36,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private val handler = Handler(Looper.getMainLooper())
     private lateinit var binding: ActivitySearchBinding
     private var searchText = ""
     //for search results
     private val trackList = ArrayList<Track>()
     private lateinit var trackAdapter: TrackAdapter
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { search(binding.etSearch.text.toString()) }
     //for search history
     private lateinit var listener: OnSharedPreferenceChangeListener
     //retrofit
@@ -87,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
         val searchHistoryAdapter = SearchHistoryAdapter {
             searchHistory.saveToHistory(it)
             val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-            intent.putExtra(trackExtra, it)
+            intent.putExtra(TRACK_EXTRA, it)
             startActivity(intent)
         }
         searchHistoryAdapter.searchHistoryTracks = searchHistory.loadHistory()
@@ -102,10 +107,12 @@ class SearchActivity : AppCompatActivity() {
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
         //Recycler view search results
         trackAdapter = TrackAdapter {
-            searchHistory.saveToHistory(it)
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-            intent.putExtra(trackExtra, it)
-            startActivity(intent)
+            if (clickDebounce()) {
+                searchHistory.saveToHistory(it)
+                val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+                intent.putExtra(TRACK_EXTRA, it)
+                startActivity(intent)
+            }
         }
         trackAdapter.tracks = trackList
         binding.rvTracksSearch.adapter = trackAdapter
@@ -122,6 +129,7 @@ class SearchActivity : AppCompatActivity() {
                     trackAdapter.notifyDataSetChanged()
                 }
                 else binding.lrSearchHistory.visibility = View.GONE
+                searchDebounce()
             }
         }
         binding.etSearch.addTextChangedListener(textWatcher)
@@ -140,19 +148,24 @@ class SearchActivity : AppCompatActivity() {
         persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
-        searchText = savedInstanceState?.getString(searchField, searchFieldDefault) ?: ""
+        searchText = savedInstanceState?.getString(SEARCH_FIELD, SEARCH_FIELD_DEFAULT) ?: ""
         binding.etSearch.setText(searchText)
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(searchField, searchText)
+        outState.putString(SEARCH_FIELD, searchText)
     }
 
     private fun search(text: String) {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvTracksSearch.visibility = View.GONE
+        binding.lrPlaceHolder.visibility = View.GONE
         iTunesService.findTrack(text).enqueue(object : Callback<TracksResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
+                binding.progressBar.visibility = View.GONE
+                binding.rvTracksSearch.visibility = View.VISIBLE
                 if (response.code() == 200) {
                     trackList.clear()
                     val results = response.body()?.results
@@ -202,10 +215,26 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     companion object {
-        const val searchField = "SEARCH_FIELD"
-        const val searchFieldDefault = ""
-        const val trackExtra = "TRACK_EXTRA"
+        const val SEARCH_FIELD = "SEARCH_FIELD"
+        const val SEARCH_FIELD_DEFAULT = ""
+        const val TRACK_EXTRA = "TRACK_EXTRA"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
 }
