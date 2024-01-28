@@ -10,72 +10,80 @@
 
     <TextView
         android:id="@+id/tvGoBack"
-        android:text="@string/search"
-        style="@style/titleWithBack" />
+        style="@style/titleWithBack"
+        android:text="@string/search" />
 
     <FrameLayout
+        style="@style/searchField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
-        style="@style/searchField">
+        android:layout_marginTop="20dp">
 
         <ImageView
+            style="@style/searchFieldImages"
             android:layout_gravity="start|center_vertical"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/search"
             android:src="@drawable/search"
-            tools:ignore="ImageContrastCheck"
-            style="@style/searchFieldImages"/>
+            tools:ignore="ImageContrastCheck" />
 
         <EditText
             android:id="@+id/etSearch"
+            style="@style/searchEditText"
             android:hint="@string/search"
-            tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck"
-            style="@style/searchEditText"/>
+            tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
 
         <ImageView
             android:id="@+id/ivClear"
-            android:layout_marginEnd="12dp"
+            style="@style/searchFieldImages"
             android:layout_gravity="end|center_vertical"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:visibility="gone"
+            android:layout_marginEnd="12dp"
             android:contentDescription="@string/clear_search"
-            style="@style/searchFieldImages"/>
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone" />
 
     </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/icon_44"
+        android:layout_height="@dimen/icon_44"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/lrSearchHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin24"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            style="@style/searchHistoryTitle"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSearchHistory"
+        <LinearLayout
+            android:id="@+id/lrSearchHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:reverseLayout="true"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/track_item"
-            tools:itemCount="1"/>
+            android:layout_marginTop="@dimen/margin24"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/btnClearHistory"
-            android:text="@string/clear_history"
-            android:layout_marginBottom="60dp"
-            style="@style/refreshInternetButton"/>
+            <TextView style="@style/searchHistoryTitle" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSearchHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="true"
+                tools:itemCount="1"
+                tools:listitem="@layout/track_item" />
+
+            <Button
+                android:id="@+id/btnClearHistory"
+                style="@style/refreshInternetButton"
+                android:layout_marginBottom="60dp"
+                android:text="@string/clear_history" />
+
+        </LinearLayout>
 
     </ScrollView>
 
@@ -85,18 +93,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTracksSearch"
+            style="@style/recyclerViewStyle"
             android:layout_marginTop="@dimen/big_padding"
-            tools:listitem="@layout/track_item"
             tools:itemCount="1"
-            style="@style/recyclerViewStyle"/>
+            tools:listitem="@layout/track_item" />
 
         <LinearLayout
             android:id="@+id/lrPlaceHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="102dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="102dp"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <FrameLayout
@@ -106,39 +114,39 @@
 
 
                 <ImageView
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/music_key_1"
                     style="@style/placeHolderImage"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/music_key_1"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/ivPlaceHolder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
                     android:layout_marginStart="38dp"
-                    android:src="@drawable/no_internet"
+                    android:layout_marginTop="28dp"
                     android:background="#00FFFFFF"
+                    android:src="@drawable/no_internet"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:layout_marginTop="6dp"
-                    android:layout_marginStart="80dp"
-                    android:src="@drawable/music_key_2"
                     style="@style/placeHolderImage"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/music_key_2"
                     tools:ignore="ContentDescription" />
 
             </FrameLayout>
 
             <TextView
                 android:id="@+id/tvPlaceHolder"
-                style="@style/placeHolderText"/>
+                style="@style/placeHolderText" />
 
             <Button
                 android:id="@+id/btnRefresh"
-                android:text="@string/refresh"
-                style="@style/refreshInternetButton"/>
+                style="@style/refreshInternetButton"
+                android:text="@string/refresh" />
 
         </LinearLayout>
 

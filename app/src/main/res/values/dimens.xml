@@ -16,6 +16,8 @@
     <dimen name="medium_padding">12dp</dimen>
     <dimen name="big_padding">16dp</dimen>
     <dimen name="biggest_padding">20dp</dimen>
+    <!-- Icon size -->
+    <dimen name="icon_44">44dp</dimen>
     <!-- Text sizes and weight -->
     <dimen name="small_text_size">11sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
