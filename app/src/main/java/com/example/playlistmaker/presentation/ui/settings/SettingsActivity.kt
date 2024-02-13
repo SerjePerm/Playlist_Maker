@@ -1,4 +1,4 @@
-package com.example.playlistmaker.activities
+package com.example.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +16,10 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initializeClickListeners()
+    }
+
+    private fun initializeClickListeners() {
         // GoBack button
         binding.tvGoBack.setOnClickListener { finish() }
         // DarkTheme switch

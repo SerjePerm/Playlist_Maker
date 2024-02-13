@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data
+package com.example.playlistmaker.domain.models
 
 import com.example.playlistmaker.utils.msToTime
 import java.io.Serializable
