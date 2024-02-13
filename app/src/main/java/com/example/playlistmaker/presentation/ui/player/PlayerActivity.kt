@@ -30,19 +30,22 @@ class PlayerActivity : AppCompatActivity(), MediaPlayerView {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //
+        track = intent.getSerializableExtra(TRACK_EXTRA) as Track
+        presenter = Creator.provideMediaPlayerPresenter(this, track.previewUrl)
+        mainThreadHandler = Handler(Looper.getMainLooper())
+        //
+        setTrackDataToViews(track)
+        initializeClickListeners()
+        //load poster
+        Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big).centerCrop().transform(RoundedCorners(dpToPx(8, this))).into(binding.ivPoster)
+    }
+
+    private fun initializeClickListeners() {
         //GoBack button
         binding.ivBackButton.setOnClickListener { finish() }
-        //load track from extra and set all textViews
-        track = intent.getSerializableExtra(TRACK_EXTRA) as Track
-        loadTrackInfo(track)
-        //load poster
-        Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big).centerCrop().transform(RoundedCorners(dpToPx(8, this)))
-            .into(binding.ivPoster)
         //media player
         binding.ivPlayButton.setOnClickListener { presenter.playPauseClick() }
-        mainThreadHandler = Handler(Looper.getMainLooper())
-        //presenter
-        presenter = Creator.provideMediaPlayerPresenter(this, track.previewUrl)
     }
 
     override fun onPause() {
@@ -55,7 +58,7 @@ class PlayerActivity : AppCompatActivity(), MediaPlayerView {
         presenter.onActivityDestroyed()
     }
 
-    private fun loadTrackInfo(track: Track) {
+    private fun setTrackDataToViews(track: Track) {
         binding.tvTrackName.text = track.trackName
         binding.tvArtistName.text = track.artistName
         binding.tvTrackTime.text = track.trackTime

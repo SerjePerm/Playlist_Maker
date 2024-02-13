@@ -15,6 +15,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.PREFERENCES_TITLE
@@ -45,25 +46,24 @@ class SearchActivity : AppCompatActivity() {
 
     // TracksInteractor + consumer
     private lateinit var tracksInteractor: TracksInteractor
-    private val consumer = object : TracksInteractor.TracksConsumer {
-        @SuppressLint("NotifyDataSetChanged")
-        override fun consume(tracksResponse: TracksResponse) {
-            handler.post {
-                binding.progressBar.visibility = View.GONE
-                binding.rvTracksSearch.visibility = View.VISIBLE
-                if (tracksResponse.resultCode == 200) {
-                    trackList.clear()
-                    if (tracksResponse.results.isNotEmpty()) {
-                        trackList.addAll(tracksResponse.results)
-                        trackAdapter.notifyDataSetChanged()
-                        showPlaceHolder(PlaceHolderType.GOOD)
-                    }
-                    if (tracksResponse.results.isEmpty()) {
-                        trackAdapter.notifyDataSetChanged()
-                        showPlaceHolder(PlaceHolderType.NO_RESULTS)
-                    }
-                } else showPlaceHolder(PlaceHolderType.NO_INTERNET)
-            }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val consumer = Consumer<TracksResponse> { tracksResponse ->
+        handler.post {
+            binding.progressBar.visibility = View.GONE
+            binding.rvTracksSearch.visibility = View.VISIBLE
+            if (tracksResponse.resultCode == 200) {
+                trackList.clear()
+                if (tracksResponse.results.isNotEmpty()) {
+                    trackList.addAll(tracksResponse.results)
+                    trackAdapter.notifyDataSetChanged()
+                    showPlaceHolder(PlaceHolderType.GOOD)
+                }
+                if (tracksResponse.results.isEmpty()) {
+                    trackAdapter.notifyDataSetChanged()
+                    showPlaceHolder(PlaceHolderType.NO_RESULTS)
+                }
+            } else showPlaceHolder(PlaceHolderType.NO_INTERNET)
         }
     }
 

@@ -16,6 +16,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initializeClickListeners()
+    }
+
+    private fun initializeClickListeners() {
         // search button
         binding.btnSearch.setOnClickListener {
             val intent = Intent(this@MainActivity, SearchActivity::class.java)
@@ -32,4 +36,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }

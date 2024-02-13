@@ -6,7 +6,7 @@ import com.example.playlistmaker.domain.models.PlayerState
 
 class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerData) : MediaPlayerInteractor {
     override fun getState(): PlayerState {
-        return mediaPlayer.playerState
+        return mediaPlayer.getPlayerState()
     }
 
     override fun getPos(): Int {

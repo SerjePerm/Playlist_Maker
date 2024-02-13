@@ -7,11 +7,15 @@ import com.example.playlistmaker.domain.models.PlayerState
 class MediaPlayerDataImpl(url: String) : MediaPlayerData {
 
     private var mediaPlayer = MediaPlayer()
-    override var playerState = PlayerState.DEFAULT
+    private var playerState = PlayerState.DEFAULT
 
     init {
         mediaPlayer.setDataSource(url)
         mediaPlayer.setOnCompletionListener { playerState = PlayerState.PREPARED }
+    }
+
+    override fun getPlayerState(): PlayerState {
+        return playerState
     }
 
     override fun getPos(): Int {
