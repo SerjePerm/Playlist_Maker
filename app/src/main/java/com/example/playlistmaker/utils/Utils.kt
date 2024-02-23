@@ -10,4 +10,3 @@ fun dpToPx(dp: Int, context: Context): Int {
 }
 
 fun msToTime(ms: Int): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(ms)
-
