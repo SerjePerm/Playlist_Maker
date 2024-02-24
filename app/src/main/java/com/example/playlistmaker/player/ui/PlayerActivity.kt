@@ -1,8 +1,6 @@
 package com.example.playlistmaker.player.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -11,12 +9,13 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.SearchActivity.Companion.TRACK_EXTRA
+import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import com.example.playlistmaker.utils.dpToPx
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var mainThreadHandler: Handler? = null
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
     private lateinit var viewModel: PlayerViewModel
@@ -26,16 +25,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //
         track = intent.getSerializableExtra(TRACK_EXTRA) as Track
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track))[PlayerViewModel::class.java]
-        //
-        mainThreadHandler = Handler(Looper.getMainLooper())
-        //
-        setTrackDataToViews(track)
+        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track.previewUrl)
+        )[PlayerViewModel::class.java]
         initializeClickListeners()
-        //load poster
-        Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big).centerCrop().transform(RoundedCorners(dpToPx(8, this))).into(binding.ivPoster)
+        initializeObservers()
+        setTrackDataToViews(track)
     }
 
     private fun initializeClickListeners() {
@@ -43,14 +38,22 @@ class PlayerActivity : AppCompatActivity() {
         binding.ivPlayButton.setOnClickListener { viewModel.playPauseClick() }
     }
 
+    private fun initializeObservers() {
+        //Player state observer
+        viewModel.playerState.observe(this@PlayerActivity) { playerState ->
+            if (playerState == PlayerState.PLAYING) {
+                binding.ivPlayButton.setImageResource(R.drawable.pause)
+            } else binding.ivPlayButton.setImageResource(R.drawable.play)
+        }
+        //Player position observer
+        viewModel.playerPos.observe(this@PlayerActivity) { playerPos ->
+            binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         viewModel.onActivityPaused()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onActivityDestroyed()
     }
 
     private fun setTrackDataToViews(track: Track) {
@@ -61,32 +64,8 @@ class PlayerActivity : AppCompatActivity() {
         binding.tvYear.text = track.releaseYear
         binding.tvGenre.text = track.primaryGenreName
         binding.tvCountry.text = track.country
+        Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big)
+            .centerCrop().transform(RoundedCorners(dpToPx(8, this))).into(binding.ivPoster)
     }
 
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-
-                /*
-                if (presenter.getState() == PlayerState.PLAYING) {
-                    binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(presenter.getPos())
-                    mainThreadHandler?.postDelayed(this, DELAY)
-                }
-
-                 */
-
-            }
-        }
-    }
-
-    fun setState(playerState: PlayerState) {
-        if (playerState == PlayerState.PLAYING) {
-            mainThreadHandler?.post(createUpdateTimerTask())
-            binding.ivPlayButton.setImageResource(R.drawable.pause)
-        } else binding.ivPlayButton.setImageResource(R.drawable.play)
-    }
-
-    companion object {
-        private const val DELAY = 500L
-    }
 }

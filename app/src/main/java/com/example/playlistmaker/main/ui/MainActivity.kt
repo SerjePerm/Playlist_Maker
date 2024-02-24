@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             MainPaths.MEDIATEKA -> {
-                val intent = Intent(this, MediatekaActivity::class.java)
+                val intent = Intent(this@MainActivity, MediatekaActivity::class.java)
                 startActivity(intent)
             }
             MainPaths.SETTINGS -> {
-                val intent = Intent(this, SettingsActivity::class.java)
+                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(intent)
             }
         }

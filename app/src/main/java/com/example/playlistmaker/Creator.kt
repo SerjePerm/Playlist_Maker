@@ -3,7 +3,6 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.App.Companion.PREFERENCES_TITLE
 import com.example.playlistmaker.player.data.MediaPlayerDataImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.search.data.TracksHistoryRepositoryImpl
@@ -18,13 +17,15 @@ import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.sharing.data.SharingDataImpl
 import com.example.playlistmaker.sharing.domain.SharingInteractor
 import com.example.playlistmaker.sharing.domain.SharingInteractorImpl
+import com.example.playlistmaker.utils.Constants.Companion.PREFERENCES_TITLE
 
 object Creator {
 
-    fun provideTracksInteractor(sharedPreferences: SharedPreferences): TracksInteractor {
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        val sp = provideSharedPreferences(context)
         return TracksInteractorImpl(
             repository = TracksRepositoryImpl(RetrofitNetworkClient()),
-            history = TracksHistoryRepositoryImpl(sharedPreferences)
+            history = TracksHistoryRepositoryImpl(sp)
         )
     }
 
