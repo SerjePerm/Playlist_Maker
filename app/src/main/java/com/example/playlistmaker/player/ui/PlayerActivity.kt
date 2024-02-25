@@ -80,13 +80,15 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setTrackDataToViews(track: Track) {
-        binding.tvTrackName.text = track.trackName
-        binding.tvArtistName.text = track.artistName
-        binding.tvTrackTime.text = track.trackTime
-        binding.tvCollection.text = track.collectionName
-        binding.tvYear.text = track.releaseYear
-        binding.tvGenre.text = track.primaryGenreName
-        binding.tvCountry.text = track.country
+        with(binding) {
+            tvTrackName.text = track.trackName
+            tvArtistName.text = track.artistName
+            tvTrackTime.text = track.trackTime
+            tvCollection.text = track.collectionName
+            tvYear.text = track.releaseYear
+            tvGenre.text = track.primaryGenreName
+            tvCountry.text = track.country
+        }
         Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big)
             .centerCrop().transform(RoundedCorners(dpToPx(8, this))).into(binding.ivPoster)
     }

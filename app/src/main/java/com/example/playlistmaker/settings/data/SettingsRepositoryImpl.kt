@@ -1,6 +1,7 @@
 package com.example.playlistmaker.settings.data
 
 import android.content.SharedPreferences
+import com.example.playlistmaker.settings.domain.SettingsRepository
 import com.example.playlistmaker.utils.Constants.Companion.DARK_THEME
 
 class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :

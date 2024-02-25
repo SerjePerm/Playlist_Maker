@@ -77,14 +77,14 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard()
             binding.etSearch.setText("")
             viewModel.loadAndSetSearchHistory()
-            binding.lrSearchHistory.visibility = View.VISIBLE
+            binding.lrSearchHistory.isVisible = true
         }
         //Set focus listener for search edit text
         binding.etSearch.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.etSearch.text.isEmpty() && historyTrackList.isNotEmpty()) {
-                binding.lrSearchHistory.visibility = View.VISIBLE
+                binding.lrSearchHistory.isVisible = true
             }
-            else binding.lrSearchHistory.visibility = View.GONE
+            else binding.lrSearchHistory.isVisible = false
         }
         //Text watcher for search edit text
         val textWatcher = object : TextWatcher {
@@ -95,10 +95,10 @@ class SearchActivity : AppCompatActivity() {
                 viewModel.searchDebounce(s.toString())
                 if (binding.etSearch.hasFocus() && s?.isEmpty() == true) {
                     viewModel.loadAndSetSearchHistory()
-                    binding.lrSearchHistory.visibility = View.VISIBLE
+                    binding.lrSearchHistory.isVisible = true
                 } else {
-                    binding.lrSearchHistory.visibility = View.GONE
-                    binding.rvTracksSearch.visibility = View.VISIBLE
+                    binding.lrSearchHistory.isVisible= false
+                    binding.rvTracksSearch.isVisible = true
                 }
             }
         }
@@ -120,17 +120,17 @@ class SearchActivity : AppCompatActivity() {
     private fun showErrorScreen() {
         showPlaceHolder(PlaceHolderType.NO_INTERNET)
         //Hide others
-        binding.progressBar.visibility = View.GONE
-        binding.rvTracksSearch.visibility = View.GONE
-        binding.lrSearchHistory.visibility = View.GONE
+        binding.progressBar.isVisible = false
+        binding.rvTracksSearch.isVisible = false
+        binding.lrSearchHistory.isVisible = false
     }
 
     private fun showLoadingScreen() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.isVisible = true
         //Hide others
         hideKeyboard()
-        binding.rvTracksSearch.visibility = View.GONE
-        binding.lrSearchHistory.visibility = View.GONE
+        binding.rvTracksSearch.isVisible = false
+        binding.lrSearchHistory.isVisible = false
         showPlaceHolder(PlaceHolderType.GOOD)
     }
 
@@ -142,9 +142,9 @@ class SearchActivity : AppCompatActivity() {
             searchHistoryAdapter.notifyDataSetChanged()
         }
         //Hide all
-        binding.lrSearchHistory.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
-        binding.rvTracksSearch.visibility = View.GONE
+        binding.lrSearchHistory.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.rvTracksSearch.isVisible = false
         showPlaceHolder(PlaceHolderType.GOOD)
     }
 
@@ -152,38 +152,38 @@ class SearchActivity : AppCompatActivity() {
     private fun showSearchResults(resultsList: List<Track>) {
         if (resultsList.isEmpty()) {
             showPlaceHolder(PlaceHolderType.NO_RESULTS)
-            binding.rvTracksSearch.visibility = View.GONE
+            binding.rvTracksSearch.isVisible = false
         }
         if (resultsList.isNotEmpty()) {
             showPlaceHolder(PlaceHolderType.GOOD)
             resultsTrackList.clear()
             resultsTrackList.addAll(resultsList)
             searchTracksAdapter.notifyDataSetChanged()
-            binding.rvTracksSearch.visibility = View.VISIBLE
+            binding.rvTracksSearch.isVisible = true
         }
         //Hide others
-        binding.progressBar.visibility = View.GONE
-        binding.lrSearchHistory.visibility = View.GONE
+        binding.progressBar.isVisible = false
+        binding.lrSearchHistory.isVisible = false
     }
 
     private fun showPlaceHolder(type: PlaceHolderType) {
         when (type) {
             PlaceHolderType.GOOD -> {
-                binding.lrPlaceHolder.visibility = View.GONE
+                binding.lrPlaceHolder.isVisible = false
             }
 
             PlaceHolderType.NO_INTERNET -> {
                 binding.ivPlaceHolder.setImageResource(R.drawable.no_internet)
                 binding.tvPlaceHolder.text = getString(R.string.no_internet)
-                binding.btnRefresh.visibility = View.VISIBLE
-                binding.lrPlaceHolder.visibility = View.VISIBLE
+                binding.btnRefresh.isVisible = true
+                binding.lrPlaceHolder.isVisible = true
             }
 
             PlaceHolderType.NO_RESULTS -> {
                 binding.ivPlaceHolder.setImageResource(R.drawable.empty_search_smile)
                 binding.tvPlaceHolder.text = getString(R.string.no_results)
-                binding.btnRefresh.visibility = View.GONE
-                binding.lrPlaceHolder.visibility = View.VISIBLE
+                binding.btnRefresh.isVisible = false
+                binding.lrPlaceHolder.isVisible = true
             }
         }
     }

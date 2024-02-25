@@ -1,7 +1,5 @@
 package com.example.playlistmaker.player.domain
 
-import com.example.playlistmaker.player.data.MediaPlayerData
-
 class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerData) : MediaPlayerInteractor {
     override fun getState(): PlayerState {
         return mediaPlayer.getPlayerState()
