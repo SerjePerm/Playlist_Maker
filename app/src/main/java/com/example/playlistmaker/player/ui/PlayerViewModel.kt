@@ -58,13 +58,13 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     private fun timerTask() {
         updatePlayerInfo()
         if (mediaPlayerInteractor.getState() == PlayerState.PLAYING) {
-            handler.postDelayed(timerRunnable, TIMER_TOKEN, TIMER_DELAY)
+            handler.postDelayed(timerRunnable, TIMER_TOKEN, TIMER_DELAY_MILLIS)
         }
     }
 
     companion object{
         private val TIMER_TOKEN = Any()
-        private const val TIMER_DELAY = 500L
+        private const val TIMER_DELAY_MILLIS = 500L
 
         fun getViewModelFactory(previewUrl: String): ViewModelProvider.Factory = viewModelFactory {
             initializer { PlayerViewModel(

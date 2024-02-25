@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.getString
 import com.example.playlistmaker.R
+import com.example.playlistmaker.sharing.domain.SharingData
 
 class SharingDataImpl(private val context: Context) : SharingData {
 

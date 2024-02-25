@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.player.domain.MediaPlayerData
 import com.example.playlistmaker.player.domain.PlayerState
 
 class MediaPlayerDataImpl(url: String) : MediaPlayerData {

@@ -41,7 +41,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         latestSearchText = searchText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(searchText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
         handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
     }
 
@@ -72,7 +72,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
     companion object {
         private  val SEARCH_REQUEST_TOKEN = Any()
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
 
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
