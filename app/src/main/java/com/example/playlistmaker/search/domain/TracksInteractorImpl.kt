@@ -33,7 +33,7 @@ class TracksInteractorImpl(
     }
 
     companion object {
-        private const val MAX_HISTORY_SIZE = 0
+        private const val MAX_HISTORY_SIZE = 9
     }
 
 }

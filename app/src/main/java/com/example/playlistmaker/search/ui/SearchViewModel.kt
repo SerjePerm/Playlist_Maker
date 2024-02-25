@@ -29,18 +29,13 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         loadAndSetSearchHistory()
     }
 
-    private fun loadAndSetSearchHistory() {
+    fun loadAndSetSearchHistory() {
         val searchHistory = tracksInteractor.loadFromHistory()
         _screenState.value = SearchScreenState.SearchHistory(searchHistory)
     }
 
-    fun onSearchTextChanged(searchText: String) {
-        //TODO() hide clear button
-        if (searchText.isBlank()) loadAndSetSearchHistory()
-        else searchDebounce(searchText)
-    }
-
     fun searchDebounce(searchText: String) {
+        if (searchText.isBlank()) return
         if (latestSearchText == searchText) return
         latestSearchText = searchText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -49,30 +44,15 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
     }
 
-    private fun searchRequest(searchText: String) {
-        //TODO() set screen to loading
+    fun searchRequest(searchText: String) {
+        _screenState.value = SearchScreenState.Loading
         val consumer = Consumer<TracksResponse> { tracksResponse ->
             if (tracksResponse.resultCode == 200) {
-                if (tracksResponse.results.isNotEmpty()) {
-                    _screenState.postValue(SearchScreenState.SearchResults(tracksResponse.results))
-                }
-                if (tracksResponse.results.isEmpty()) {
-                    println("show empty results")
-                }
-            }
-            else println("show no internet")
+                _screenState.postValue(SearchScreenState.SearchResults(tracksResponse.results))
+              }
+            else _screenState.postValue(SearchScreenState.Error)
         }
         tracksInteractor.searchTracks(searchText, consumer)
-    }
-
-    fun onSearchTextFocusChanged(searchText: String, hasFocus: Boolean) {
-        if (searchText.isEmpty() && hasFocus) {
-            loadAndSetSearchHistory()
-        }
-    }
-
-    fun clearSearchTextClick() {
-        println("clearSearchTextClick")
     }
 
     fun clearHistoryClick() {

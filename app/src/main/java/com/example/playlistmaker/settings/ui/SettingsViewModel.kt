@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.sharing.domain.SharingInteractor
+import com.example.playlistmaker.utils.SingleLiveEvent
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
@@ -26,7 +27,7 @@ class SettingsViewModel(
     }
 
     fun changeTheme(value: Boolean) {
-        if (_isDarkTheme.value != value) {
+        if (settingsInteractor.loadIsDarkTheme() != value) {
             _isDarkTheme.value = value
             settingsInteractor.saveIsDarkTheme(value)
             if (value) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

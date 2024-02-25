@@ -43,7 +43,9 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.playerState.observe(this@PlayerActivity) { playerState ->
             if (playerState == PlayerState.PLAYING) {
                 binding.ivPlayButton.setImageResource(R.drawable.pause)
-            } else binding.ivPlayButton.setImageResource(R.drawable.play)
+            } else {
+                binding.ivPlayButton.setImageResource(R.drawable.play)
+            }
         }
         //Player position observer
         viewModel.playerPos.observe(this@PlayerActivity) { playerPos ->
