@@ -39,17 +39,38 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initializeObservers() {
-        //Player state observer
-        viewModel.playerState.observe(this@PlayerActivity) { playerState ->
-            if (playerState == PlayerState.PLAYING) {
-                binding.ivPlayButton.setImageResource(R.drawable.pause)
-            } else {
-                binding.ivPlayButton.setImageResource(R.drawable.play)
+        viewModel.screenState.observe(this@PlayerActivity) { screenState ->
+            when (screenState) {
+                PlayerScreenState.Error -> { }
+                PlayerScreenState.Loading -> { }
+                is PlayerScreenState.Content -> {
+                    updatePlayerInfo(
+                        playerState = screenState.playerState,
+                        playerPos = screenState.playerPos
+                    )
+                }
             }
         }
-        //Player position observer
-        viewModel.playerPos.observe(this@PlayerActivity) { playerPos ->
-            binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+    }
+
+    private fun updatePlayerInfo(playerState: PlayerState, playerPos: Int) {
+        when(playerState) {
+            PlayerState.DEFAULT -> {
+                binding.ivPlayButton.setImageResource(R.drawable.play)
+                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
+            }
+            PlayerState.PREPARED -> {
+                binding.ivPlayButton.setImageResource(R.drawable.play)
+                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
+            }
+            PlayerState.PLAYING -> {
+                binding.ivPlayButton.setImageResource(R.drawable.pause)
+                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+            }
+            PlayerState.PAUSED -> {
+                binding.ivPlayButton.setImageResource(R.drawable.play)
+                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+            }
         }
     }
 

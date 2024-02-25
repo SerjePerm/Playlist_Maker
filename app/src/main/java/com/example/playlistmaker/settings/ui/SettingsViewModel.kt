@@ -27,7 +27,7 @@ class SettingsViewModel(
     }
 
     fun changeTheme(value: Boolean) {
-        if (settingsInteractor.loadIsDarkTheme() != value) {
+        if (_isDarkTheme.value != value) {
             _isDarkTheme.value = value
             settingsInteractor.saveIsDarkTheme(value)
             if (value) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

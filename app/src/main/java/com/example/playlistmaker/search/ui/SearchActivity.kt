@@ -69,12 +69,15 @@ class SearchActivity : AppCompatActivity() {
         //Clear search history button
         binding.btnClearHistory.setOnClickListener { viewModel.clearHistoryClick() }
         //No internet / refresh button
-        binding.btnRefresh.setOnClickListener { viewModel.searchRequest(binding.etSearch.text.toString()) }
+        binding.btnRefresh.setOnClickListener {
+            viewModel.searchRequest(binding.etSearch.text.toString())
+        }
         //Clear text button
         binding.ivClear.setOnClickListener {
             hideKeyboard()
             binding.etSearch.setText("")
             viewModel.loadAndSetSearchHistory()
+            binding.lrSearchHistory.visibility = View.VISIBLE
         }
         //Set focus listener for search edit text
         binding.etSearch.setOnFocusChangeListener { _, hasFocus ->
@@ -90,9 +93,9 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.ivClear.isVisible = s.isNullOrEmpty().not()
                 viewModel.searchDebounce(s.toString())
-                if (binding.etSearch.hasFocus() && s?.isEmpty() == true && historyTrackList.isNotEmpty()) {
+                if (binding.etSearch.hasFocus() && s?.isEmpty() == true) {
+                    viewModel.loadAndSetSearchHistory()
                     binding.lrSearchHistory.visibility = View.VISIBLE
-                    binding.rvTracksSearch.visibility = View.GONE
                 } else {
                     binding.lrSearchHistory.visibility = View.GONE
                     binding.rvTracksSearch.visibility = View.VISIBLE

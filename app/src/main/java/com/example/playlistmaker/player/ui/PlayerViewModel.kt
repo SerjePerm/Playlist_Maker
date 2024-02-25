@@ -13,15 +13,16 @@ import com.example.playlistmaker.player.domain.PlayerState
 
 class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
+    //Screen state
+    private val _screenState = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
+    val screenState: LiveData<PlayerScreenState> = _screenState
     //For timer
     private val handler = android.os.Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable { timerTask() }
-    //Player state
-    private val _playerState = MutableLiveData(PlayerState.DEFAULT)
-    val playerState: LiveData<PlayerState> = _playerState
-    //Player pos
-    private val _playerPos = MutableLiveData(0)
-    val playerPos: LiveData<Int> = _playerPos
+
+    init {
+        _screenState.value = PlayerScreenState.Content()
+    }
 
     private fun playerPlay() {
         mediaPlayerInteractor.play()
@@ -30,12 +31,13 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     private fun playerPause() {
         mediaPlayerInteractor.pause()
-        updatePlayerStateAndPos()
+        updatePlayerInfo()
     }
 
-    private fun updatePlayerStateAndPos() {
-        _playerState.value = mediaPlayerInteractor.getState()
-        _playerPos.value = mediaPlayerInteractor.getPos()
+    private fun updatePlayerInfo() {
+        val tmpPlayerState = mediaPlayerInteractor.getState()
+        val tmpPlayerPos = mediaPlayerInteractor.getPos()
+        _screenState.value = PlayerScreenState.Content(tmpPlayerState, tmpPlayerPos)
     }
 
     fun playPauseClick() {
@@ -54,7 +56,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     }
 
     private fun timerTask() {
-        updatePlayerStateAndPos()
+        updatePlayerInfo()
         if (mediaPlayerInteractor.getState() == PlayerState.PLAYING) {
             handler.postDelayed(timerRunnable, TIMER_TOKEN, TIMER_DELAY)
         }

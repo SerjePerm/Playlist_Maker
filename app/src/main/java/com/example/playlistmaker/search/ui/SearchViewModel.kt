@@ -30,6 +30,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     }
 
     fun loadAndSetSearchHistory() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchHistory = tracksInteractor.loadFromHistory()
         _screenState.value = SearchScreenState.SearchHistory(searchHistory)
     }
