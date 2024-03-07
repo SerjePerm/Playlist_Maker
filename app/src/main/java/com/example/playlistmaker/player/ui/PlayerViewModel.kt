@@ -1,23 +1,21 @@
 package com.example.playlistmaker.player.ui
 
-import android.os.Looper
+import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 
-class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val handler: Handler
+) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
     val screenState: LiveData<PlayerScreenState> = _screenState
     //For timer
-    private val handler = android.os.Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable { timerTask() }
 
     init {
@@ -38,6 +36,10 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         val tmpPlayerState = mediaPlayerInteractor.getState()
         val tmpPlayerPos = mediaPlayerInteractor.getPos()
         _screenState.value = PlayerScreenState.Content(tmpPlayerState, tmpPlayerPos)
+    }
+
+    fun setDataSource(url: String) {
+        mediaPlayerInteractor.setDataSource(url)
     }
 
     fun playPauseClick() {
@@ -65,12 +67,6 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     companion object{
         private val TIMER_TOKEN = Any()
         private const val TIMER_DELAY_MILLIS = 500L
-
-        fun getViewModelFactory(previewUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer { PlayerViewModel(
-                 mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(previewUrl)
-            ) }
-        }
     }
 
 }
