@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.ui
 
-import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import androidx.core.util.Consumer
 import androidx.lifecycle.LiveData
@@ -10,12 +10,10 @@ import com.example.playlistmaker.search.domain.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.TracksResponse
 
-class SearchViewModel(
-    private val tracksInteractor: TracksInteractor,
-    private val handler: Handler
-) : ViewModel() {
+class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
 
     //For debounce
+    private val handler = android.os.Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
     //Screen state
     private val _screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)

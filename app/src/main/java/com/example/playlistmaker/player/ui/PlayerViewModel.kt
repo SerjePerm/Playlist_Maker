@@ -1,21 +1,19 @@
 package com.example.playlistmaker.player.ui
 
-import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 
-class PlayerViewModel(
-    private val mediaPlayerInteractor: MediaPlayerInteractor,
-    private val handler: Handler
-) : ViewModel() {
+class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
     val screenState: LiveData<PlayerScreenState> = _screenState
     //For timer
+    private val handler = android.os.Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable { timerTask() }
 
     init {

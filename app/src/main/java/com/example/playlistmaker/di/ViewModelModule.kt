@@ -19,11 +19,11 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlayerViewModel(get(), get())
+        PlayerViewModel(get())
     }
 
     viewModel {
-        SearchViewModel(get(), get())
+        SearchViewModel(get())
     }
 
     viewModel {

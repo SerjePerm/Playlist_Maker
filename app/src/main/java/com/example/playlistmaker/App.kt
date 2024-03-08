@@ -15,11 +15,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startKoinFun()
+        initializeKoin()
         setLightOrDarkTheme()
     }
 
-    private fun startKoinFun() {
+    private fun initializeKoin() {
         startKoin {
             androidContext(this@App)
             modules(dataModule, interactorModule, repositoryModule, viewModelModule)
