@@ -2,7 +2,6 @@ package com.example.playlistmaker.player.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -11,6 +10,7 @@ import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import com.example.playlistmaker.utils.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,7 +18,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel()
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +26,7 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         track = intent.getSerializableExtra(TRACK_EXTRA) as Track
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track.previewUrl)
-        )[PlayerViewModel::class.java]
+        viewModel.setDataSource(track.previewUrl)
         initializeClickListeners()
         initializeObservers()
         setTrackDataToViews(track)

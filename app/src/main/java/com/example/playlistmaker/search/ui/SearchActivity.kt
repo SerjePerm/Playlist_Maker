@@ -6,11 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
@@ -19,11 +17,12 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapters.SearchTracksAdapter
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
     //for search results
     private val resultsTrackList = ArrayList<Track>()
     private lateinit var searchTracksAdapter: SearchTracksAdapter
@@ -35,8 +34,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
         initializeAdapters()
         initializeListeners()
         initializeObservers()

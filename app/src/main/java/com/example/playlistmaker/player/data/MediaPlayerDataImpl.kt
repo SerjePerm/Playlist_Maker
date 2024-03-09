@@ -4,12 +4,11 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.MediaPlayerData
 import com.example.playlistmaker.player.domain.PlayerState
 
-class MediaPlayerDataImpl(url: String) : MediaPlayerData {
+class MediaPlayerDataImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerData {
 
-    private var mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.DEFAULT
 
-    init {
+    override fun setDataSource(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.setOnCompletionListener { playerState = PlayerState.PREPARED }
     }
