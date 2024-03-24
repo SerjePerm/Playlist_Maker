@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.mediateka.ui.MediatekaActivity
+import com.example.playlistmaker.mediateka.ui.mediateka.MediatekaActivity
 import com.example.playlistmaker.search.ui.SearchActivity
 import com.example.playlistmaker.settings.ui.SettingsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

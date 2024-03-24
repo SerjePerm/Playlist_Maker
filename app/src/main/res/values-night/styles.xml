@@ -154,4 +154,10 @@
         <item name="android:background">@drawable/round_button_gray_dark</item>
     </style>
 
+    <style name="tabLayout">
+        <item name="android:background">@color/lightBlack</item>
+        <item name="tabTextColor">@color/white</item>
+        <item name="tabIndicatorColor">@color/white</item>
+    </style>
+
 </resources>
