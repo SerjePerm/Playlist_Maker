@@ -26,7 +26,8 @@
             android:exported="false" />
         <activity
             android:name=".settings.ui.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".main.ui.MainActivity"
             android:exported="true">
