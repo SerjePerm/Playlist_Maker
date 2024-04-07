@@ -1,23 +1,32 @@
 package com.example.playlistmaker.mediateka.ui.mediateka
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityMediatekaBinding
+import com.example.playlistmaker.databinding.FragmentMediatekaBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediatekaActivity : AppCompatActivity() {
+class MediatekaFragment : Fragment() {
 
-    private lateinit var binding: ActivityMediatekaBinding
+    private lateinit var binding: FragmentMediatekaBinding
     private val viewModel: MediatekaViewModel by viewModel()
     private lateinit var tabMediator: TabLayoutMediator
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMediatekaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initializeClickListeners()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMediatekaBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initializeFragmentsTabs()
     }
 
@@ -26,12 +35,8 @@ class MediatekaActivity : AppCompatActivity() {
         tabMediator.detach()
     }
 
-    private fun initializeClickListeners() {
-        binding.tvGoBack.setOnClickListener { finish() }
-    }
-
     private fun initializeFragmentsTabs() {
-        binding.viewPager.adapter = PagerAdapter(supportFragmentManager, lifecycle)
+        binding.viewPager.adapter = PagerAdapter(childFragmentManager, lifecycle)
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = resources.getString(R.string.favorites)

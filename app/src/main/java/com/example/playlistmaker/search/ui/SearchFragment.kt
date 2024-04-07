@@ -6,11 +6,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.PlaceHolderType
 import com.example.playlistmaker.search.domain.models.Track
@@ -19,21 +22,30 @@ import com.example.playlistmaker.search.ui.adapters.SearchTracksAdapter
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
+
     //for search results
     private val resultsTrackList = ArrayList<Track>()
     private lateinit var searchTracksAdapter: SearchTracksAdapter
+
     //for search history
     private val historyTrackList = ArrayList<Track>()
     private lateinit var searchHistoryAdapter: SearchHistoryAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initializeAdapters()
         initializeListeners()
         initializeObservers()
@@ -43,7 +55,7 @@ class SearchActivity : AppCompatActivity() {
         //Recycler view search results
         searchTracksAdapter = SearchTracksAdapter {
             viewModel.saveToHistory(it)
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
             intent.putExtra(TRACK_EXTRA, it)
             startActivity(intent)
         }
@@ -52,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
         //Recycler view search history
         searchHistoryAdapter = SearchHistoryAdapter {
             viewModel.saveToHistory(it)
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
             intent.putExtra(TRACK_EXTRA, it)
             startActivity(intent)
         }
@@ -61,8 +73,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initializeListeners() {
-        //GoBack button
-        binding.tvGoBack.setOnClickListener { finish() }
         //Clear search history button
         binding.btnClearHistory.setOnClickListener { viewModel.clearHistoryClick() }
         //No internet / refresh button
@@ -78,10 +88,8 @@ class SearchActivity : AppCompatActivity() {
         }
         //Set focus listener for search edit text
         binding.etSearch.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && binding.etSearch.text.isEmpty() && historyTrackList.isNotEmpty()) {
-                binding.lrSearchHistory.isVisible = true
-            }
-            else binding.lrSearchHistory.isVisible = false
+            binding.lrSearchHistory.isVisible =
+                hasFocus && binding.etSearch.text.isEmpty() && historyTrackList.isNotEmpty()
         }
         //Text watcher for search edit text
         val textWatcher = object : TextWatcher {
@@ -94,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
                     viewModel.loadAndSetSearchHistory()
                     binding.lrSearchHistory.isVisible = true
                 } else {
-                    binding.lrSearchHistory.isVisible= false
+                    binding.lrSearchHistory.isVisible = false
                     binding.rvTracksSearch.isVisible = true
                 }
             }
@@ -104,12 +112,23 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initializeObservers() {
         //Screen state observer
-        viewModel.screenState.observe(this@SearchActivity) { screenState ->
+        viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
-                is SearchScreenState.Error -> { showErrorScreen() }
-                SearchScreenState.Loading -> { showLoadingScreen() }
-                is SearchScreenState.SearchHistory -> { setSearchHistory(screenState.historyList) }
-                is SearchScreenState.SearchResults -> { showSearchResults(screenState.resultsList) }
+                is SearchScreenState.Error -> {
+                    showErrorScreen()
+                }
+
+                SearchScreenState.Loading -> {
+                    showLoadingScreen()
+                }
+
+                is SearchScreenState.SearchHistory -> {
+                    setSearchHistory(screenState.historyList)
+                }
+
+                is SearchScreenState.SearchResults -> {
+                    showSearchResults(screenState.resultsList)
+                }
             }
         }
     }
@@ -186,7 +205,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputManager?.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
     }
 
