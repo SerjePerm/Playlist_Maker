@@ -10,7 +10,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var binding: FragmentSettingsBinding
+    private var _binding: FragmentSettingsBinding? = null
+    protected val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreateView(
@@ -18,7 +19,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSettingsBinding.inflate(layoutInflater)
+        _binding = FragmentSettingsBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -26,6 +27,11 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isDarkTheme.observe(viewLifecycleOwner) { binding.switchDarkTheme.isChecked = it }
         initializeClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun initializeClickListeners() {
