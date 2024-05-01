@@ -31,7 +31,6 @@
     <style name="titleWithBack">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:drawablePadding">@dimen/medium_padding</item>
         <item name="android:paddingHorizontal">@dimen/medium_padding</item>
         <item name="android:paddingTop">@dimen/small_padding</item>
         <item name="android:paddingBottom">@dimen/medium_padding</item>
@@ -39,8 +38,6 @@
         <item name="android:textFontWeight">@integer/text_weight_500</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
-        <item name="drawableStartCompat">@drawable/arrow_back</item>
-        <item name="android:drawableTint">@color/lightBlack</item>
     </style>
 
     <style name="settingsTextView" parent="Widget.MaterialComponents.TextView">
@@ -193,6 +190,25 @@
         <item name="android:background">@color/white</item>
         <item name="tabTextColor">@color/lightBlack</item>
         <item name="tabIndicatorColor">@color/lightBlack</item>
+    </style>
+
+    <!-- BottomNavigationView -->
+    <style name="BottomNavigationViewStyle">
+        <item name="itemIconTint">@color/bottom_nav_selector</item>
+        <item name="itemTextColor">@color/bottom_nav_selector</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavText</item>
+        <item name="itemActiveIndicatorStyle">@style/ActiveIndicatorStyle</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomNavText" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="ActiveIndicatorStyle">
+        <item name="itemIconTint">@color/blue</item>
     </style>
 
 </resources>

@@ -31,7 +31,7 @@
     <string name="playlists">Плейлисты</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
-        <!-- strings for support contact e-mail, user license and share btn -->
+    <!-- strings for support contact e-mail, user license and share btn -->
     <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
     <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="support_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
