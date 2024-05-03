@@ -1,17 +1,16 @@
 package com.example.playlistmaker.search.domain
 
-import androidx.core.util.Consumer
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.TracksResponse
+import kotlinx.coroutines.flow.Flow
 
 class TracksInteractorImpl(
     private val repository: TracksRepository,
     private val history: TracksHistoryRepository
 ) : TracksInteractor {
 
-    override fun searchTracks(expression: String, consumer: Consumer<TracksResponse>) {
-        val t = Thread { consumer.accept(repository.searchTracks(expression)) }
-        t.start()
+    override fun searchTracks(expression: String): Flow<TracksResponse> {
+        return repository.searchTracks(expression)
     }
 
     override fun saveToHistory(track: Track) {
