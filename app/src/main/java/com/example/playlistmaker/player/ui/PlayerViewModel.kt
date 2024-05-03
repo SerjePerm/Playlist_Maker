@@ -1,20 +1,23 @@
 package com.example.playlistmaker.player.ui
 
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
     val screenState: LiveData<PlayerScreenState> = _screenState
+
     //For timer
-    private val handler = android.os.Handler(Looper.getMainLooper())
-    private val timerRunnable = Runnable { timerTask() }
+    private var timerJob: Job? = null
 
     init {
         _screenState.value = PlayerScreenState.Content()
@@ -22,10 +25,11 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     private fun playerPlay() {
         mediaPlayerInteractor.play()
-        handler.post(timerRunnable)
+        startTimer()
     }
 
     private fun playerPause() {
+        timerJob?.cancel()
         mediaPlayerInteractor.pause()
         updatePlayerInfo()
     }
@@ -51,20 +55,20 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     override fun onCleared() {
         super.onCleared()
-        handler.removeCallbacksAndMessages(TIMER_TOKEN)
         mediaPlayerInteractor.stop()
     }
 
-    private fun timerTask() {
-        updatePlayerInfo()
-        if (mediaPlayerInteractor.getState() == PlayerState.PLAYING) {
-            handler.postDelayed(timerRunnable, TIMER_TOKEN, TIMER_DELAY_MILLIS)
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (mediaPlayerInteractor.getState() == PlayerState.PLAYING) {
+                delay(TIMER_DELAY_MILLIS)
+                updatePlayerInfo()
+            }
         }
     }
 
-    companion object{
-        private val TIMER_TOKEN = Any()
-        private const val TIMER_DELAY_MILLIS = 500L
+    companion object {
+        private const val TIMER_DELAY_MILLIS = 300L
     }
 
 }

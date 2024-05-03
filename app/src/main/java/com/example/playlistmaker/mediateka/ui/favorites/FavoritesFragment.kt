@@ -13,7 +13,7 @@ class FavoritesFragment : Fragment() {
 
     private val viewmodel: FavoritesViewModel by viewModel()
     private var _binding: FragmentFavoritesBinding? = null
-    protected val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,

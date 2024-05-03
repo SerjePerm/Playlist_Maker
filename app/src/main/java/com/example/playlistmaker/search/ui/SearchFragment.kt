@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
@@ -20,12 +21,13 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapters.SearchTracksAdapter
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
-    protected val binding get() = _binding!!
+    private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
 
     //for search results
@@ -35,6 +37,8 @@ class SearchFragment : Fragment() {
     //for search history
     private val historyTrackList = ArrayList<Track>()
     private lateinit var searchHistoryAdapter: SearchHistoryAdapter
+
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +51,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeDebounce()
         initializeAdapters()
         initializeListeners()
         initializeObservers()
@@ -57,22 +62,30 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
+    private fun initializeDebounce() {
+        onTrackClickDebounce = debounce(
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false
+        ) { track ->
+            viewModel.saveToHistory(track)
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
+            intent.putExtra(TRACK_EXTRA, track)
+            startActivity(intent)
+        }
+
+    }
+
     private fun initializeAdapters() {
         //Recycler view search results
         searchTracksAdapter = SearchTracksAdapter {
-            viewModel.saveToHistory(it)
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-            intent.putExtra(TRACK_EXTRA, it)
-            startActivity(intent)
+            onTrackClickDebounce(it)
         }
         searchTracksAdapter.tracks = resultsTrackList
         binding.rvTracksSearch.adapter = searchTracksAdapter
         //Recycler view search history
         searchHistoryAdapter = SearchHistoryAdapter {
-            viewModel.saveToHistory(it)
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-            intent.putExtra(TRACK_EXTRA, it)
-            startActivity(intent)
+            onTrackClickDebounce(it)
         }
         searchHistoryAdapter.searchHistoryTracks = historyTrackList
         binding.rvSearchHistory.adapter = searchHistoryAdapter
@@ -214,6 +227,10 @@ class SearchFragment : Fragment() {
         val inputManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputManager?.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 
 }

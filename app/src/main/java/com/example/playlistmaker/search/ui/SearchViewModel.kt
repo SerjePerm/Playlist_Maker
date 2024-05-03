@@ -1,20 +1,26 @@
 package com.example.playlistmaker.search.ui
 
-import android.os.Looper
-import android.os.SystemClock
-import androidx.core.util.Consumer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.TracksResponse
+import com.example.playlistmaker.utils.debounce
+import kotlinx.coroutines.launch
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
 
     //For debounce
-    private val handler = android.os.Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
+    private val trackSearchDebounce = debounce<String>(
+        delayMillis = SEARCH_DEBOUNCE_DELAY_MILLIS,
+        coroutineScope = viewModelScope,
+        useLastParam = true
+    ) { changedText ->
+        searchRequest(changedText)
+    }
+
     //Screen state
     private val _screenState = MutableLiveData<SearchScreenState>(SearchScreenState.Loading)
     val screenState: LiveData<SearchScreenState> = _screenState
@@ -24,7 +30,6 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     }
 
     fun loadAndSetSearchHistory() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchHistory = tracksInteractor.loadFromHistory()
         _screenState.value = SearchScreenState.SearchHistory(searchHistory)
     }
@@ -33,21 +38,18 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         if (searchText.isBlank()) return
         if (latestSearchText == searchText) return
         latestSearchText = searchText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchRequest(searchText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
-        handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
+        trackSearchDebounce(searchText)
     }
 
     fun searchRequest(searchText: String) {
         _screenState.value = SearchScreenState.Loading
-        val consumer = Consumer<TracksResponse> { tracksResponse ->
-            if (tracksResponse.resultCode == 200) {
-                _screenState.postValue(SearchScreenState.SearchResults(tracksResponse.results))
-              }
-            else _screenState.postValue(SearchScreenState.Error)
+        viewModelScope.launch {
+            tracksInteractor.searchTracks(searchText).collect { response ->
+                if (response.resultCode == 200) {
+                    _screenState.postValue(SearchScreenState.SearchResults(response.results))
+                } else _screenState.postValue(SearchScreenState.Error)
+            }
         }
-        tracksInteractor.searchTracks(searchText, consumer)
     }
 
     fun clearHistoryClick() {
@@ -59,13 +61,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
         tracksInteractor.saveToHistory(track)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
     companion object {
-        private  val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 

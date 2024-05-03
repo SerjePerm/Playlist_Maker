@@ -13,7 +13,7 @@ class PlaylistsFragment : Fragment() {
 
     private val viewmodel: PlaylistsViewModel by viewModel()
     private var _binding: FragmentPlaylistsBinding? = null
-    protected val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +35,8 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        viewmodel.screenState.observe(viewLifecycleOwner) {screenState ->
-            when(screenState) {
+        viewmodel.screenState.observe(viewLifecycleOwner) { screenState ->
+            when (screenState) {
                 is PlaylistsScreenState.Content -> showContent(screenState)
                 PlaylistsScreenState.Error -> TODO()
                 PlaylistsScreenState.Loading -> TODO()

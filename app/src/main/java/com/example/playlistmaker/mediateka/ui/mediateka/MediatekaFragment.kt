@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MediatekaFragment : Fragment() {
 
     private var _binding: FragmentMediatekaBinding? = null
-    protected val binding get() = _binding!!
+    private val binding get() = _binding!!
     private val viewModel: MediatekaViewModel by viewModel()
     private lateinit var tabMediator: TabLayoutMediator
 
