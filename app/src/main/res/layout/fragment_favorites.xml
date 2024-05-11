@@ -52,4 +52,12 @@
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTracksFavorites"
+        style="@style/recyclerViewStyle"
+        android:layout_marginTop="@dimen/big_padding"
+        tools:itemCount="1"
+        tools:listitem="@layout/track_item" />
+
+
 </LinearLayout>

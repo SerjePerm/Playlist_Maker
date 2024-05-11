@@ -2,6 +2,12 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
+import com.example.playlistmaker.mediateka.data.FavoritesRepositoryImpl
+import com.example.playlistmaker.mediateka.data.db.MainDB
+import com.example.playlistmaker.mediateka.domain.FavoritesInteractor
+import com.example.playlistmaker.mediateka.domain.FavoritesInteractorImpl
+import com.example.playlistmaker.mediateka.domain.FavoritesRepository
 import com.example.playlistmaker.player.data.MediaPlayerDataImpl
 import com.example.playlistmaker.player.domain.MediaPlayerData
 import com.example.playlistmaker.search.data.network.ITunesApi
@@ -45,6 +51,22 @@ val dataModule = module {
 
     single<SharingData> {
         SharingDataImpl(androidContext())
+    }
+
+    single {
+        Room.databaseBuilder(
+            context = androidContext(),
+            klass = MainDB::class.java,
+            name = Constants.DB_NAME
+        ).build()
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get())
+    }
+
+    single<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
     }
 
 }

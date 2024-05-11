@@ -26,7 +26,7 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         track = intent.getSerializableExtra(TRACK_EXTRA) as Track
-        viewModel.setDataSource(track.previewUrl)
+        viewModel.setDataSource(track)
         initializeClickListeners()
         initializeObservers()
         setTrackDataToViews(track)
@@ -35,6 +35,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun initializeClickListeners() {
         binding.ivBackButton.setOnClickListener { finish() }
         binding.ivPlayButton.setOnClickListener { viewModel.playPauseClick() }
+        binding.ibFavoriteButton.setOnClickListener { viewModel.changeFavoriteClick(track) }
     }
 
     private fun initializeObservers() {
@@ -49,6 +50,10 @@ class PlayerActivity : AppCompatActivity() {
                     )
                 }
             }
+        }
+        viewModel.isFavorite.observe(this@PlayerActivity) { isFavorite ->
+            if (isFavorite) binding.ibFavoriteButton.setImageResource(R.drawable.del_from_favorite)
+            else binding.ibFavoriteButton.setImageResource(R.drawable.add_to_favorite)
         }
     }
 
