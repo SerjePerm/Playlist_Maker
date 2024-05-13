@@ -195,6 +195,7 @@
 
     <!-- BottomNavigationView -->
     <style name="BottomNavigationViewStyle">
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="itemBackground">@drawable/item_bg</item>
         <item name="itemPaddingTop">@dimen/margin8</item>
         <item name="itemPaddingBottom">@dimen/margin10</item>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context=".mediateka.ui.mediateka.MediatekaFragment">
 
@@ -17,13 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:tabIndicatorAnimationDuration="300"
+        app:tabIndicator="@drawable/tab_indicator"
         app:tabIndicatorColor="?attr/colorOnPrimary"
-        app:tabIndicatorFullWidth="true"
         app:tabMode="fixed"
-        app:tabRippleColor="@color/lightBlue"
-        app:tabTextColor="?attr/colorOnPrimary"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:tabTextColor="?attr/colorOnPrimary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
