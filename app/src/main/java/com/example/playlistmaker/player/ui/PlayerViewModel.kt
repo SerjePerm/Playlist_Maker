@@ -4,23 +4,36 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.mediateka.domain.FavoritesInteractor
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor
+) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
     val screenState: LiveData<PlayerScreenState> = _screenState
+    private val _isFavorite = MutableLiveData(false)
+    val isFavorite: LiveData<Boolean> = _isFavorite
+    private var trackId = -1
 
     //For timer
     private var timerJob: Job? = null
 
     init {
         _screenState.value = PlayerScreenState.Content()
+        viewModelScope.launch {
+            favoritesInteractor.favoriteIds().collect{ ids ->
+                _isFavorite.value = ids.contains(trackId)
+            }
+        }
     }
 
     private fun playerPlay() {
@@ -40,8 +53,9 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         _screenState.value = PlayerScreenState.Content(tmpPlayerState, tmpPlayerPos)
     }
 
-    fun setDataSource(url: String) {
-        mediaPlayerInteractor.setDataSource(url)
+    fun setDataSource(track: Track) {
+        mediaPlayerInteractor.setDataSource(track.previewUrl)
+        trackId = track.trackId
     }
 
     fun playPauseClick() {
@@ -64,6 +78,12 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
                 delay(TIMER_DELAY_MILLIS)
                 updatePlayerInfo()
             }
+        }
+    }
+
+    fun changeFavoriteClick(track: Track) {
+        viewModelScope.launch {
+            favoritesInteractor.changeFavorite(track)
         }
     }
 

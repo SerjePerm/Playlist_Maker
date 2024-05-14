@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary">
 
     <LinearLayout
         android:id="@+id/lrPlaceHolder"
@@ -51,5 +52,13 @@
             android:text="@string/empty_favorites"/>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTracksFavorites"
+        style="@style/recyclerViewStyle"
+        android:layout_marginTop="@dimen/big_padding"
+        tools:itemCount="1"
+        tools:listitem="@layout/track_item" />
+
 
 </LinearLayout>

@@ -1,9 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/lightBlack</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/lightBlack</item>
         <item name="colorSecondary">@color/blue</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>

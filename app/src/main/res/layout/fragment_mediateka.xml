@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context=".mediateka.ui.mediateka.MediatekaFragment">
 
@@ -14,11 +15,13 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        style="@style/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorFullWidth="true"
-        app:tabMode="fixed" />
+        android:background="?attr/colorPrimary"
+        app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorColor="?attr/colorOnPrimary"
+        app:tabMode="fixed"
+        app:tabTextColor="?attr/colorOnPrimary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

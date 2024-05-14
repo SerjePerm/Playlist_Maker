@@ -3,6 +3,8 @@ package com.example.playlistmaker.utils
 class Constants {
 
     companion object {
+        //DB
+        const val DB_NAME = "PlayListMaker_db"
         //ITunes
         const val I_TUNES_BASE_URL = "https://itunes.apple.com"
         //Shared preferences
