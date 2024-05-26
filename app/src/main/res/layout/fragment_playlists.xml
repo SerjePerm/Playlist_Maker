@@ -7,7 +7,7 @@
     android:background="?attr/colorPrimary">
 
     <Button
-        android:id="@+id/btnRefresh"
+        android:id="@+id/btnAddPlaylist"
         style="@style/refreshInternetButton"
         android:text="@string/new_playlist" />
 

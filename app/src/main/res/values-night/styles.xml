@@ -37,6 +37,7 @@
         <item name="android:textFontWeight">@integer/text_weight_500</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:drawableTint">@color/white</item>
     </style>
 
     <style name="settingsTextView" parent="Widget.MaterialComponents.TextView">

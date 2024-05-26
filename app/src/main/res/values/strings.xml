@@ -31,6 +31,16 @@
     <string name="playlists">Плейлисты</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+    <!-- strings for add playlist fragment -->
+    <string name="title">Название*</string>
+    <string name="description">Описание</string>
+    <string name="create">Создать</string>
+    <string name="dialog_title">Завершить создание плейлиста?</string>
+    <string name="dialog_text">Все несохраненные данные будут потеряны</string>
+    <string name="dialog_ok">Завершить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="image_select">Выбрать обложку</string>
+    <string name="image_empty">Необходимо выбрать изображение</string>
     <!-- strings for support contact e-mail, user license and share btn -->
     <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
     <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,6 +29,7 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeObservers()
+        initializeListeners()
     }
 
     override fun onDestroyView() {
@@ -41,6 +44,12 @@ class PlaylistsFragment : Fragment() {
                 PlaylistsScreenState.Error -> TODO()
                 PlaylistsScreenState.Loading -> TODO()
             }
+        }
+    }
+
+    private fun initializeListeners() {
+        binding.btnAddPlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_mediatekaFragment_to_addPlaylistFragment)
         }
     }
 
