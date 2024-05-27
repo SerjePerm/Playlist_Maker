@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mediateka.data.db
 
+import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.search.domain.models.Track
 
 fun Track.toTrackEntity(): TrackEntity {
@@ -30,5 +31,25 @@ fun TrackEntity.toTrack(): Track {
         primaryGenreName = this.primaryGenreName,
         country = this.country,
         previewUrl = this.previewUrl
+    )
+}
+
+fun Playlist.toPlaylistEntity(): PlaylistEntity {
+    return PlaylistEntity(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        poster = this.poster,
+        count = this.count
+    )
+}
+
+fun PlaylistEntity.toPlaylist(): Playlist {
+    return Playlist(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        poster = this.poster,
+        count = this.count
     )
 }

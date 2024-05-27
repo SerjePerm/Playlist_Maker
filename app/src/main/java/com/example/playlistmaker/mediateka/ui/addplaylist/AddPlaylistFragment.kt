@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -48,13 +49,15 @@ class AddPlaylistFragment : Fragment() {
 
     private fun initializeObservers() {
         viewmodel.screenState.observe(viewLifecycleOwner) { screenState ->
-            //println("isChangesExist: ${screenState.isChangesExist}")
-            val bool = screenState.isTitleNotEmpty
-            println("on fragment bool: ${bool}")
-            binding.btnCreate.isEnabled = bool
-
+            //empty title
+            binding.btnCreate.isEnabled = screenState.isTitleNotEmpty
+            //changes exist for exit dialog
             isChangesExist = screenState.isChangesExist
-            binding.ivSelectImage.setImageURI(screenState.uri)
+            //select image
+            if (screenState.uri != null) {
+                binding.ivSelectImage.setImageURI(screenState.uri)
+                binding.ivSelectImage.scaleType = ImageView.ScaleType.CENTER_CROP
+            }
         }
     }
 
@@ -63,17 +66,25 @@ class AddPlaylistFragment : Fragment() {
             if (uri != null) {
                 viewmodel.changeUri(uri = uri)
             } else {
-                Toast.makeText(requireContext(), getString(R.string.image_empty), Toast.LENGTH_LONG)
-                    .show()
+                showToast(getString(R.string.image_empty))
             }
         }
     }
 
     private fun initializeClickListeners() {
+        //select image
         binding.ivSelectImage.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
+        //create playlist
+        binding.btnCreate.setOnClickListener {
+            viewmodel.createClick()
+            showToast(getString(R.string.playlist_created, binding.etTitle.text))
+            findNavController().navigateUp()
+        }
+        //title with back
         binding.tvGoBack.setOnClickListener { showExitDialog() }
+        //system back button
         activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 showExitDialog()
@@ -99,13 +110,21 @@ class AddPlaylistFragment : Fragment() {
     }
 
     private fun showExitDialog() {
-        MaterialAlertDialogBuilder(requireActivity()).setTitle(getString(R.string.dialog_title))
-            .setMessage(getString(R.string.dialog_text))
-            .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ ->
-                //close dialog
-            }.setPositiveButton(R.string.dialog_ok) { _, _ ->
-                findNavController().navigateUp()
-            }.show()
+        if (isChangesExist) {
+            MaterialAlertDialogBuilder(requireActivity()).setTitle(getString(R.string.dialog_title))
+                .setMessage(getString(R.string.dialog_text))
+                .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ ->
+                    //close dialog
+                }.setPositiveButton(R.string.dialog_ok) { _, _ ->
+                    findNavController().navigateUp()
+                }.show()
+        } else {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
     }
 
 }

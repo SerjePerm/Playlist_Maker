@@ -1,5 +1,7 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.mediateka.data.PlaylistsRepositoryImpl
+import com.example.playlistmaker.mediateka.domain.PlaylistsRepository
 import com.example.playlistmaker.search.data.TracksHistoryRepositoryImpl
 import com.example.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.playlistmaker.search.domain.TracksHistoryRepository
@@ -20,6 +22,10 @@ val repositoryModule = module {
 
     single<TracksRepository> {
         TracksRepositoryImpl(get())
+    }
+
+    single<PlaylistsRepository> {
+        PlaylistsRepositoryImpl(get())
     }
 
 }
