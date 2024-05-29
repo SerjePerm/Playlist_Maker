@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mediateka.domain.FavoritesInteractor
+import com.example.playlistmaker.mediateka.domain.PlaylistsInteractor
+import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val mediaPlayerInteractor: MediaPlayerInteractor,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesInteractor: FavoritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     //Screen state
@@ -23,6 +26,8 @@ class PlayerViewModel(
     private val _isFavorite = MutableLiveData(false)
     val isFavorite: LiveData<Boolean> = _isFavorite
     private var trackId = -1
+    private val _playlists = MutableLiveData<List<Playlist>>(emptyList())
+    val playlists: LiveData<List<Playlist>> = _playlists
 
     //For timer
     private var timerJob: Job? = null
@@ -32,6 +37,11 @@ class PlayerViewModel(
         viewModelScope.launch {
             favoritesInteractor.favoriteIds().collect{ ids ->
                 _isFavorite.value = ids.contains(trackId)
+            }
+        }
+        viewModelScope.launch {
+            playlistsInteractor.playlists().collect { list ->
+                _playlists.value = list
             }
         }
     }

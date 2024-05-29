@@ -5,10 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.mediateka.domain.PlaylistsInteractor
 import com.example.playlistmaker.mediateka.domain.models.Playlist
 import kotlinx.coroutines.launch
 
-class AddPlaylistViewModel : ViewModel() {
+class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<AddPlaylistScreenState>()
@@ -22,12 +23,12 @@ class AddPlaylistViewModel : ViewModel() {
         viewModelScope.launch {
             val newPlaylist = Playlist(
                 id = null,
-                title = _screenState.value.title,
-                description = _screenState.value.description,
-                poster = _screenState.value.uri,
+                title = _screenState.value!!.title,
+                description = _screenState.value!!.description,
+                poster = _screenState.value!!.uri.toString(),
                 count = 0
             )
-            //interactor pl
+            playlistsInteractor.upsertPlaylist(newPlaylist)
         }
     }
 
@@ -49,8 +50,8 @@ class AddPlaylistViewModel : ViewModel() {
 
     private fun checkChanges() {
         val isChangesExist = _screenState.value?.title?.isNotBlank() == true ||
-                    _screenState.value?.description?.isNotBlank() == true ||
-                    _screenState.value?.uri != null
+                _screenState.value?.description?.isNotBlank() == true ||
+                _screenState.value?.uri != null
         _screenState.value = _screenState.value?.copy(isChangesExist = isChangesExist)
     }
 

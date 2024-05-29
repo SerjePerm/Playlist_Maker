@@ -1,12 +1,15 @@
 package com.example.playlistmaker.player.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.player.ui.adapter.PlaylistsSmallAdapter
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import com.example.playlistmaker.utils.dpToPx
@@ -19,6 +22,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel()
+    private val playlistsList = ArrayList<Playlist>()
+    private lateinit var playlistsAdapter: PlaylistsSmallAdapter
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +34,7 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.setDataSource(track)
         initializeClickListeners()
         initializeObservers()
+        initializeAdapter()
         setTrackDataToViews(track)
     }
 
@@ -38,11 +44,12 @@ class PlayerActivity : AppCompatActivity() {
         binding.ibFavoriteButton.setOnClickListener { viewModel.changeFavoriteClick(track) }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initializeObservers() {
         viewModel.screenState.observe(this@PlayerActivity) { screenState ->
             when (screenState) {
-                PlayerScreenState.Error -> { }
-                PlayerScreenState.Loading -> { }
+                PlayerScreenState.Error -> {}
+                PlayerScreenState.Loading -> {}
                 is PlayerScreenState.Content -> {
                     updatePlayerInfo(
                         playerState = screenState.playerState,
@@ -55,25 +62,43 @@ class PlayerActivity : AppCompatActivity() {
             if (isFavorite) binding.ibFavoriteButton.setImageResource(R.drawable.del_from_favorite)
             else binding.ibFavoriteButton.setImageResource(R.drawable.add_to_favorite)
         }
+        viewModel.playlists.observe(this@PlayerActivity) { list ->
+            playlistsList.clear()
+            playlistsList.addAll(list)
+            playlistsAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun initializeAdapter() {
+        playlistsAdapter = PlaylistsSmallAdapter { playlist ->
+            println("clicked ${playlist.title}")
+        }
+        playlistsAdapter.playlists = playlistsList
+        binding.rvPlaylists.adapter = playlistsAdapter
     }
 
     private fun updatePlayerInfo(playerState: PlayerState, playerPos: Int) {
-        when(playerState) {
+        when (playerState) {
             PlayerState.DEFAULT -> {
                 binding.ivPlayButton.setImageResource(R.drawable.play)
                 binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
             }
+
             PlayerState.PREPARED -> {
                 binding.ivPlayButton.setImageResource(R.drawable.play)
                 binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
             }
+
             PlayerState.PLAYING -> {
                 binding.ivPlayButton.setImageResource(R.drawable.pause)
-                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+                binding.tvPlayTime.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
             }
+
             PlayerState.PAUSED -> {
                 binding.ivPlayButton.setImageResource(R.drawable.play)
-                binding.tvPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
+                binding.tvPlayTime.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerPos)
             }
         }
     }
