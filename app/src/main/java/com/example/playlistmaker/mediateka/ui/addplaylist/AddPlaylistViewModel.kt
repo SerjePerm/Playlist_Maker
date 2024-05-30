@@ -26,6 +26,7 @@ class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor)
                 title = _screenState.value!!.title,
                 description = _screenState.value!!.description,
                 poster = _screenState.value!!.uri.toString(),
+                tracks = "[]",
                 count = 0
             )
             playlistsInteractor.upsertPlaylist(newPlaylist)

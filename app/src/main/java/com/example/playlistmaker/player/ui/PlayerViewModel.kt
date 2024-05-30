@@ -10,6 +10,8 @@ import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,7 +37,7 @@ class PlayerViewModel(
     init {
         _screenState.value = PlayerScreenState.Content()
         viewModelScope.launch {
-            favoritesInteractor.favoriteIds().collect{ ids ->
+            favoritesInteractor.favoriteIds().collect { ids ->
                 _isFavorite.value = ids.contains(trackId)
             }
         }
@@ -94,6 +96,28 @@ class PlayerViewModel(
     fun changeFavoriteClick(track: Track) {
         viewModelScope.launch {
             favoritesInteractor.changeFavorite(track)
+        }
+    }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        /*
+        val data: ArrayList<Int> = arrayListOf()
+        val json = Gson().toJson(data)
+        println("json: <$json>")
+
+         */
+        println("add TrackId $trackId to playlist ${playlist.title}")
+        val playlistTracks: ArrayList<Int> = Gson().fromJson(
+            playlist.tracks, object : TypeToken<ArrayList<Int>>() {}.type
+        )
+        playlistTracks.forEach { println("- trackId in playlist: $it") }
+        if (playlistTracks.contains(trackId)) {
+            println("track already in playlist!")
+        } else {
+            println("adding track to playlist...")
+            viewModelScope.launch {
+                playlistsInteractor.addTrackToPlaylist(track = track, playlist = playlist)
+            }
         }
     }
 

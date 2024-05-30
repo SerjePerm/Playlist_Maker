@@ -2,6 +2,8 @@ package com.example.playlistmaker.player.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -13,6 +15,7 @@ import com.example.playlistmaker.player.ui.adapter.PlaylistsSmallAdapter
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import com.example.playlistmaker.utils.dpToPx
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -24,6 +27,7 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel: PlayerViewModel by viewModel()
     private val playlistsList = ArrayList<Playlist>()
     private lateinit var playlistsAdapter: PlaylistsSmallAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,7 @@ class PlayerActivity : AppCompatActivity() {
         initializeClickListeners()
         initializeObservers()
         initializeAdapter()
+        initializeBottomSheet()
         setTrackDataToViews(track)
     }
 
@@ -42,6 +47,9 @@ class PlayerActivity : AppCompatActivity() {
         binding.ivBackButton.setOnClickListener { finish() }
         binding.ivPlayButton.setOnClickListener { viewModel.playPauseClick() }
         binding.ibFavoriteButton.setOnClickListener { viewModel.changeFavoriteClick(track) }
+        binding.ibAddButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -71,10 +79,31 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun initializeAdapter() {
         playlistsAdapter = PlaylistsSmallAdapter { playlist ->
-            println("clicked ${playlist.title}")
+            viewModel.addTrackToPlaylist(track = track, playlist = playlist)
         }
         playlistsAdapter.playlists = playlistsList
         binding.rvPlaylists.adapter = playlistsAdapter
+    }
+
+    private fun initializeBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.lrBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(
+            object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            binding.overlay.visibility = View.GONE
+                        }
+
+                        else -> {
+                            binding.overlay.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        )
     }
 
     private fun updatePlayerInfo(playerState: PlayerState, playerPos: Int) {
