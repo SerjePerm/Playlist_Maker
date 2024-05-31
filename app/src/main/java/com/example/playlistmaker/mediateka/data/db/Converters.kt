@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mediateka.data.db
 
+import android.net.Uri
 import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.search.domain.models.Track
 
@@ -65,23 +66,23 @@ fun SelectedTrackEntity.toTrack(): Track {
     )
 }
 
-fun Playlist.toPlaylistEntity(): PlaylistEntity {
+fun Playlist.toPlaylistEntity(filename: String): PlaylistEntity {
     return PlaylistEntity(
         id = this.id,
         title = this.title,
         description = this.description,
-        poster = this.poster,
+        poster = filename,
         tracks = this.tracks,
         count = this.count
     )
 }
 
-fun PlaylistEntity.toPlaylist(): Playlist {
+fun PlaylistEntity.toPlaylist(uri: Uri?): Playlist {
     return Playlist(
         id = this.id,
         title = this.title,
         description = this.description,
-        poster = this.poster,
+        poster = uri,
         tracks = this.tracks,
         count = this.count
     )

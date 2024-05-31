@@ -1,18 +1,18 @@
 package com.example.playlistmaker.mediateka.ui.favorites
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
-import com.example.playlistmaker.player.ui.PlayerActivity
+import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.adapters.SearchTracksAdapter
-import com.example.playlistmaker.utils.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment : Fragment() {
@@ -55,9 +55,10 @@ class FavoritesFragment : Fragment() {
 
     private fun initializeAdapter() {
         favoriteTracksAdapter = SearchTracksAdapter { track ->
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-            intent.putExtra(Constants.TRACK_EXTRA, track)
-            startActivity(intent)
+            findNavController().navigate(
+                resId = R.id.action_mediatekaFragment_to_playerFragment,
+                args = PlayerFragment.createArguments(track)
+            )
         }
         favoriteTracksAdapter.tracks = favoriteTrackList
         binding.rvTracksFavorites.adapter = favoriteTracksAdapter

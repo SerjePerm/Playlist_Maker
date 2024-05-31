@@ -10,8 +10,7 @@ import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.example.playlistmaker.utils.toIntList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -75,7 +74,7 @@ class PlayerViewModel(
         else playerPlay()
     }
 
-    fun onActivityPaused() {
+    fun onFragmentPaused() {
         playerPause()
     }
 
@@ -100,17 +99,7 @@ class PlayerViewModel(
     }
 
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
-        /*
-        val data: ArrayList<Int> = arrayListOf()
-        val json = Gson().toJson(data)
-        println("json: <$json>")
-
-         */
-        println("add TrackId $trackId to playlist ${playlist.title}")
-        val playlistTracks: ArrayList<Int> = Gson().fromJson(
-            playlist.tracks, object : TypeToken<ArrayList<Int>>() {}.type
-        )
-        playlistTracks.forEach { println("- trackId in playlist: $it") }
+        val playlistTracks = playlist.tracks.toIntList()
         if (playlistTracks.contains(trackId)) {
             println("track already in playlist!")
         } else {

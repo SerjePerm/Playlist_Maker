@@ -4,28 +4,34 @@ import com.example.playlistmaker.mediateka.data.db.MainDB
 import com.example.playlistmaker.mediateka.data.db.toPlaylist
 import com.example.playlistmaker.mediateka.data.db.toPlaylistEntity
 import com.example.playlistmaker.mediateka.data.db.toSelectedTrackEntity
+import com.example.playlistmaker.mediateka.domain.ImagesRepository
 import com.example.playlistmaker.mediateka.domain.PlaylistsRepository
 import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.utils.toIntList
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class PlaylistsRepositoryImpl(private val db: MainDB) : PlaylistsRepository {
+class PlaylistsRepositoryImpl(
+    private val db: MainDB,
+    private val imagesRepository: ImagesRepository
+) : PlaylistsRepository {
 
     override fun playlists(): Flow<List<Playlist>> {
         return db.playlistsDao().getAll().map { list ->
-            list.map { it.toPlaylist() }
+            list.map { it.toPlaylist(imagesRepository.filenameToUri(it.poster)) }
         }
     }
 
     override suspend fun getById(playlistId: Int): Playlist? {
-        return db.playlistsDao().getById(playlistId)?.toPlaylist()
+        val playlist = db.playlistsDao().getById(playlistId)
+        return playlist?.toPlaylist(imagesRepository.filenameToUri(playlist.poster))
     }
 
     override suspend fun upsertPlaylist(playlist: Playlist) {
-        db.playlistsDao().upsert(playlist.toPlaylistEntity())
+        val filename = if (playlist.poster != null) { imagesRepository.save(playlist.poster) } else ""
+        db.playlistsDao().upsert(playlist.toPlaylistEntity(filename))
     }
 
     override suspend fun deletePlaylist(playlistId: Int) {
@@ -33,11 +39,17 @@ class PlaylistsRepositoryImpl(private val db: MainDB) : PlaylistsRepository {
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
-        val tracks: ArrayList<Int> = Gson().fromJson(playlist.tracks, object : TypeToken<ArrayList<Int>>() {}.type)
+        val tracks = playlist.tracks.toIntList()
         tracks.add(track.trackId)
         val newTracks = Gson().toJson(tracks)
-        val newPlaylist = playlist.copy(tracks = newTracks)
-        db.playlistsDao().upsert(newPlaylist.toPlaylistEntity())
+        val newPlaylist = playlist.copy(tracks = newTracks, count = tracks.count())
+        val filename = playlist.poster.toString().substringAfterLast('/')
+        //
+        println("from uri: ${playlist.poster}")
+        println("to fileN: $filename")
+        //
+        val newPlEntity = newPlaylist.toPlaylistEntity(filename)
+        db.playlistsDao().upsert(newPlEntity)
         db.selectedTracksDao().insert(track.toSelectedTrackEntity())
     }
 
