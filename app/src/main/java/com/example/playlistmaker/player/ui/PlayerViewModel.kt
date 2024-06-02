@@ -9,8 +9,10 @@ import com.example.playlistmaker.mediateka.domain.PlaylistsInteractor
 import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.player.domain.models.AddResult
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.toIntList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +31,8 @@ class PlayerViewModel(
     private var trackId = -1
     private val _playlists = MutableLiveData<List<Playlist>>(emptyList())
     val playlists: LiveData<List<Playlist>> = _playlists
+    private val _addResult = MutableLiveData(AddResult(null, null))
+    val addResult: LiveData<AddResult> = _addResult
 
     //For timer
     private var timerJob: Job? = null
@@ -93,7 +97,7 @@ class PlayerViewModel(
     }
 
     fun changeFavoriteClick(track: Track) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             favoritesInteractor.changeFavorite(track)
         }
     }
@@ -101,17 +105,24 @@ class PlayerViewModel(
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         val playlistTracks = playlist.tracks.toIntList()
         if (playlistTracks.contains(trackId)) {
-            println("track already in playlist!")
+            viewModelScope.launch(Dispatchers.IO) {
+                _addResult.postValue(AddResult(successful = false, playlist = playlist.title))
+                delay(MESSAGE_DELAY_MILLIS)
+                _addResult.postValue(AddResult(successful = null, playlist = null))
+            }
         } else {
-            println("adding track to playlist...")
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 playlistsInteractor.addTrackToPlaylist(track = track, playlist = playlist)
+                _addResult.postValue(AddResult(successful = true, playlist = playlist.title))
+                delay(MESSAGE_DELAY_MILLIS)
+                _addResult.postValue(AddResult(successful = null, playlist = null))
             }
         }
     }
 
     companion object {
         private const val TIMER_DELAY_MILLIS = 300L
+        private const val MESSAGE_DELAY_MILLIS = 1000L
     }
 
 }

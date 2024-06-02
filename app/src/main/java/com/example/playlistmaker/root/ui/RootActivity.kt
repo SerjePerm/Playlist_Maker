@@ -23,7 +23,8 @@ class RootActivity : AppCompatActivity() {
         binding.bnvBottomNav.setupWithNavController(navController)
         //show/hide bottom nav
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
-            binding.bnvBottomNav.isVisible = navDestination.id != R.id.addPlaylistFragment
+            binding.bnvBottomNav.isVisible =
+                !(navDestination.id == R.id.playerFragment || navDestination.id == R.id.addPlaylistFragment)
         }
     }
 

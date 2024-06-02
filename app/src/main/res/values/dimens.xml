@@ -2,6 +2,8 @@
 <resources>
     <dimen name="button_corner_radius">16dp</dimen>
     <!-- Margin -->
+    <dimen name="margin4">4dp</dimen>
+    <dimen name="margin6">6dp</dimen>
     <dimen name="margin8">8dp</dimen>
     <dimen name="margin10">10dp</dimen>
     <dimen name="margin12">12dp</dimen>

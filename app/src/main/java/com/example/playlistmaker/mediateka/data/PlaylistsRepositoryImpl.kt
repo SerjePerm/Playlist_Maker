@@ -43,11 +43,8 @@ class PlaylistsRepositoryImpl(
         tracks.add(track.trackId)
         val newTracks = Gson().toJson(tracks)
         val newPlaylist = playlist.copy(tracks = newTracks, count = tracks.count())
-        val filename = playlist.poster.toString().substringAfterLast('/')
-        //
-        println("from uri: ${playlist.poster}")
-        println("to fileN: $filename")
-        //
+        var filename = ""
+        if (playlist.poster!=null) filename = playlist.poster.toString().substringAfterLast('/')
         val newPlEntity = newPlaylist.toPlaylistEntity(filename)
         db.playlistsDao().upsert(newPlEntity)
         db.selectedTracksDao().insert(track.toSelectedTrackEntity())

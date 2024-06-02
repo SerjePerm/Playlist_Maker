@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -70,6 +71,9 @@ class PlayerFragment : Fragment() {
         binding.ibAddButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+        binding.btnNewPlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_addPlaylistFragment)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -94,6 +98,15 @@ class PlayerFragment : Fragment() {
             playlistsList.clear()
             playlistsList.addAll(list)
             playlistsAdapter.notifyDataSetChanged()
+        }
+        viewModel.addResult.observe(viewLifecycleOwner) { addResult ->
+            if (addResult.successful==true) {
+                showToast(getString(R.string.track_added, addResult.playlist))
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+            else if (addResult.successful==false) {
+                showToast(getString(R.string.track_exist, addResult.playlist))
+            }
         }
     }
 
@@ -169,6 +182,10 @@ class PlayerFragment : Fragment() {
         }
         Glide.with(this).load(track.bigCoverUrl).placeholder(R.drawable.placeholder_big)
             .centerCrop().transform(RoundedCorners(dpToPx(8, requireContext()))).into(binding.ivPoster)
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

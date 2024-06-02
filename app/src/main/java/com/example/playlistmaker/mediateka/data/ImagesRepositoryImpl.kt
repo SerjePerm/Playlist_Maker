@@ -16,17 +16,11 @@ import java.util.Date
 
 class ImagesRepositoryImpl(private val context: Context) : ImagesRepository {
 
-    private val filePath =
-        File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), IMAGES_DIR)
-
-    init {
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
-    }
-
     @SuppressLint("SimpleDateFormat")
     override suspend fun save(uri: Uri): String {
+        val filePath =
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), IMAGES_DIR)
+        if (!filePath.exists()) { filePath.mkdirs() }
         val filename = SimpleDateFormat("yyyy.MM.dd_HH.mm.ss").format(Date()) + ".jpg"
         val file = File(filePath, filename)
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -34,20 +28,12 @@ class ImagesRepositoryImpl(private val context: Context) : ImagesRepository {
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-        //
-        println("-------------")
-        println("ImageRepo save from URI: [$uri]")
-        println("ImageRepo save to file : [$filename]")
-        //
         return filename
     }
 
     override suspend fun filenameToUri(filename: String): Uri? {
-        val tmp = File(filePath, filename).toUri()
-        println("-------------")
-        println("convert from fn: [$filename]")
-        if (filename.isEmpty()) println("convert to uri: [null]")
-        else println("convert to uri: [$tmp]")
+        val filePath =
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), IMAGES_DIR)
         return if (filename.isEmpty()) null
         else File(filePath, filename).toUri()
     }

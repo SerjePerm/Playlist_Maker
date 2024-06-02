@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mediateka.domain.PlaylistsInteractor
 import com.example.playlistmaker.mediateka.domain.models.Playlist
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
@@ -20,7 +21,7 @@ class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor)
     }
 
     fun createClick() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val newPlaylist = Playlist(
                 id = null,
                 title = _screenState.value!!.title,
