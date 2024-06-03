@@ -42,11 +42,11 @@ val dataModule = module {
     factory { MediaPlayer() }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(get())
+        RetrofitNetworkClient(iTunesService = get())
     }
 
     factory<MediaPlayerData> {
-        MediaPlayerDataImpl(get())
+        MediaPlayerDataImpl(mediaPlayer = get())
     }
 
     single<SharingData> {
@@ -62,11 +62,11 @@ val dataModule = module {
     }
 
     single<FavoritesRepository> {
-        FavoritesRepositoryImpl(get())
+        FavoritesRepositoryImpl(db = get())
     }
 
     single<FavoritesInteractor> {
-        FavoritesInteractorImpl(get())
+        FavoritesInteractorImpl(favoritesRepository = get())
     }
 
 }

@@ -15,23 +15,23 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single<SettingsRepository> {
-        SettingsRepositoryImpl(get())
+        SettingsRepositoryImpl(sharedPreferences = get())
     }
 
     single<TracksHistoryRepository> {
-        TracksHistoryRepositoryImpl(get())
+        TracksHistoryRepositoryImpl(sharedPreferences = get())
     }
 
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(networkClient = get())
     }
 
     single<PlaylistsRepository> {
-        PlaylistsRepositoryImpl(get(), get())
+        PlaylistsRepositoryImpl(db = get(), imagesRepository = get())
     }
 
     single<ImagesRepository> {
-        ImagesRepositoryImpl(get())
+        ImagesRepositoryImpl(context = get())
     }
 
 }

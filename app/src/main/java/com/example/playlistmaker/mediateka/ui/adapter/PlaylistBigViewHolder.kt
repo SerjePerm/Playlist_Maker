@@ -10,10 +10,12 @@ class PlaylistBigViewHolder(private val binding: PlaylistBigItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(playlist: Playlist) {
-        binding.tvTitle.text = playlist.title
-        binding.tvCount.text = playlist.count.toTracksCount()
-        if (playlist.poster==null) binding.ivPoster.setImageResource(R.drawable.placeholder)
-        else binding.ivPoster.setImageURI(playlist.poster)
+        with(binding) {
+            tvTitle.text = playlist.title
+            tvCount.text = playlist.count.toTracksCount()
+            if (playlist.poster==null) { ivPoster.setImageResource(R.drawable.placeholder) }
+            else { ivPoster.setImageURI(playlist.poster) }
+        }
     }
 
 }

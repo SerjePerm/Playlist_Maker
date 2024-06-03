@@ -15,23 +15,23 @@ import org.koin.dsl.module
 val interactorModule = module {
 
     factory<MediaPlayerInteractor> {
-        MediaPlayerInteractorImpl(get())
+        MediaPlayerInteractorImpl(mediaPlayer = get())
     }
 
     factory<TracksInteractor> {
-        TracksInteractorImpl(get(), get())
+        TracksInteractorImpl(repository = get(), history = get())
     }
 
     factory<SettingsInteractor> {
-        SettingsInteractorImpl(get())
+        SettingsInteractorImpl(settingsRepository = get())
     }
 
     factory<SharingInteractor> {
-        SharingInteractorImpl(get())
+        SharingInteractorImpl(sharingData = get())
     }
 
     factory<PlaylistsInteractor> {
-        PlaylistsInteractorImpl(get())
+        PlaylistsInteractorImpl(playlistsRepository = get())
     }
 
 }
