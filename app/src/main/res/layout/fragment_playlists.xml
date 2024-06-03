@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical">
 
     <Button
-        android:id="@+id/btnRefresh"
+        android:id="@+id/btnAddPlaylist"
         style="@style/refreshInternetButton"
         android:text="@string/new_playlist" />
 
@@ -54,8 +55,19 @@
         <TextView
             android:id="@+id/tvPlaceHolder"
             style="@style/placeHolderText"
-            android:text="@string/empty_playlists"/>
+            android:text="@string/empty_playlists" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin16"
+        android:layout_marginTop="@dimen/margin16"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:itemCount="3"
+        tools:listitem="@layout/playlist_big_item" />
 
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.example.playlistmaker.search.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,14 +12,14 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.PlayerActivity
+import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.PlaceHolderType
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapters.SearchTracksAdapter
-import com.example.playlistmaker.utils.Constants.Companion.TRACK_EXTRA
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -69,9 +68,10 @@ class SearchFragment : Fragment() {
             useLastParam = false
         ) { track ->
             viewModel.saveToHistory(track)
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-            intent.putExtra(TRACK_EXTRA, track)
-            startActivity(intent)
+            findNavController().navigate(
+                resId = R.id.action_searchFragment_to_playerFragment,
+                args = PlayerFragment.createArguments(track)
+            )
         }
 
     }

@@ -1,5 +1,9 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.mediateka.data.ImagesRepositoryImpl
+import com.example.playlistmaker.mediateka.data.PlaylistsRepositoryImpl
+import com.example.playlistmaker.mediateka.domain.ImagesRepository
+import com.example.playlistmaker.mediateka.domain.PlaylistsRepository
 import com.example.playlistmaker.search.data.TracksHistoryRepositoryImpl
 import com.example.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.playlistmaker.search.domain.TracksHistoryRepository
@@ -11,15 +15,23 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single<SettingsRepository> {
-        SettingsRepositoryImpl(get())
+        SettingsRepositoryImpl(sharedPreferences = get())
     }
 
     single<TracksHistoryRepository> {
-        TracksHistoryRepositoryImpl(get())
+        TracksHistoryRepositoryImpl(sharedPreferences = get())
     }
 
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(networkClient = get())
+    }
+
+    single<PlaylistsRepository> {
+        PlaylistsRepositoryImpl(db = get(), imagesRepository = get())
+    }
+
+    single<ImagesRepository> {
+        ImagesRepositoryImpl(context = get())
     }
 
 }
