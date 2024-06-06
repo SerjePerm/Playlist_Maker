@@ -12,6 +12,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.mediateka.domain.models.Playlist
 import com.example.playlistmaker.mediateka.ui.adapter.PlaylistsBigAdapter
+import com.example.playlistmaker.mediateka.ui.playlist.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -61,7 +62,10 @@ class PlaylistsFragment : Fragment() {
 
     private fun initializeAdapter() {
         playlistsAdapter = PlaylistsBigAdapter { playlist ->
-            println("clicked ${playlist.title}")
+            findNavController().navigate(
+                resId = R.id.action_mediatekaFragment_to_playlistFragment,
+                args = PlaylistFragment.createArguments(playlist.id ?: 0)
+            )
         }
         playlistsAdapter.playlists = playlistsList
         binding.rvPlaylists.adapter = playlistsAdapter

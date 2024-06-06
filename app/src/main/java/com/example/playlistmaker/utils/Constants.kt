@@ -13,6 +13,8 @@ class Constants {
         const val SEARCH_HISTORY = "search_history"
         //Search activity
         const val TRACK_EXTRA = "TRACK_EXTRA"
+        //Playlist activity
+        const val PLAYLIST_ID = "PLAYLIST_ID"
         //Images store
         const val IMAGES_DIR = "IMAGES"
     }

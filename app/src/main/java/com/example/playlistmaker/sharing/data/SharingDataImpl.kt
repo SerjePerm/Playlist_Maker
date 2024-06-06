@@ -33,4 +33,12 @@ class SharingDataImpl(private val context: Context) : SharingData {
         context.startActivity(intent)
     }
 
+    override fun shareText(text: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
 }

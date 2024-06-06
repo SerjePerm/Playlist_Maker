@@ -13,7 +13,7 @@ interface PlaylistsDao {
     fun getAll(): Flow<List<PlaylistEntity>>
 
     @Query("SELECT * FROM playlists_table WHERE id = :playlistId")
-    suspend fun getById(playlistId: Int): PlaylistEntity?
+    fun getById(playlistId: Int): Flow<PlaylistEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(playlistEntity: PlaylistEntity)
@@ -21,4 +21,6 @@ interface PlaylistsDao {
     @Query("DELETE FROM playlists_table WHERE id = :playlistId")
     suspend fun delete(playlistId: Int)
 
+    @Query("SELECT * FROM playlists_table")
+    fun getAllOnce(): List<PlaylistEntity>
 }

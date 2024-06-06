@@ -33,7 +33,23 @@
     <string name="playlists">Плейлисты</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+    <!-- strings for playlist fragment -->
+    <string name="minutes_end">%1$d минут</string>
+    <string name="del_track_title">Удалить трек</string>
+    <string name="del_track_text">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="del_track_confirm">Удалить</string>
+    <string name="del_track_cancel">Отмена</string>
+    <string name="del_pl_title">Удалить плейлист</string>
+    <string name="del_pl_text">Хотите удалить плейлист?</string>
+    <string name="del_pl_confirm">Да</string>
+    <string name="del_pl_cancel">Нет</string>
+    <string name="no_tracks">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <!-- strings for add playlist fragment -->
+    <string name="empty_playlist">В плейлисте нет треков</string>
+    <string name="share_playlist">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="del_playlist">Удалить плейлист</string>
+    <!-- strings for add playlists fragment -->
     <string name="title">Название*</string>
     <string name="description">Описание</string>
     <string name="create">Создать</string>
