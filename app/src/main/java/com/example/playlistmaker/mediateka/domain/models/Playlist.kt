@@ -1,6 +1,7 @@
 package com.example.playlistmaker.mediateka.domain.models
 
 import android.net.Uri
+import java.io.Serializable
 
 data class Playlist(
     val id: Int?,
@@ -9,4 +10,4 @@ data class Playlist(
     val poster: Uri?,
     val tracks: String,
     val count: Int
-)
+): Serializable

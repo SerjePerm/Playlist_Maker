@@ -15,6 +15,7 @@ class Constants {
         const val TRACK_EXTRA = "TRACK_EXTRA"
         //Playlist activity
         const val PLAYLIST_ID = "PLAYLIST_ID"
+        const val PLAYLIST_EXTRA = "PLAYLIST_EXTRA"
         //Images store
         const val IMAGES_DIR = "IMAGES"
     }

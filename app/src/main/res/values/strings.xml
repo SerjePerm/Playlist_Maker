@@ -60,6 +60,10 @@
     <string name="image_select">Выбрать обложку</string>
     <string name="image_empty">Необходимо выбрать изображение</string>
     <string name="playlist_created">Плейлист %1$s создан</string>
+    <!-- strings for edit playlists fragment -->
+    <string name="edit_title">Редактировать</string>
+    <string name="save_btn">Сохранить</string>
+    <string name="playlist_edited">Плейлист %1$s изменён</string>
     <!-- strings for support contact e-mail, user license and share btn -->
     <string name="support_adress">mailto:SerjeIDZ@yandex.ru</string>
     <string name="support_subject">Спасибо разработчикам и разработчицам за крутое приложение!</string>

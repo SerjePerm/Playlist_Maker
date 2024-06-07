@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.mediateka.ui.addplaylist.AddPlaylistViewModel
+import com.example.playlistmaker.mediateka.ui.editplaylist.EditPlaylistViewModel
 import com.example.playlistmaker.mediateka.ui.favorites.FavoritesViewModel
 import com.example.playlistmaker.mediateka.ui.mediateka.MediatekaViewModel
 import com.example.playlistmaker.mediateka.ui.playlist.PlaylistViewModel
@@ -47,6 +48,10 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistViewModel(playlistsInteractor = get(), sharingInteractor = get())
+    }
+
+    viewModel {
+        EditPlaylistViewModel(playlistsInteractor = get())
     }
 
 }

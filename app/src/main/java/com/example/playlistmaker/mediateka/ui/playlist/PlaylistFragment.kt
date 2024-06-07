@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.mediateka.ui.adapter.BSTracksAdapter
+import com.example.playlistmaker.mediateka.ui.editplaylist.EditPlaylistFragment
 import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.Constants.Companion.PLAYLIST_ID
@@ -104,14 +105,19 @@ class PlaylistFragment : Fragment() {
 
     private fun initializeClickListeners() {
         with(binding) {
-            ivBackBtn.setOnClickListener { findNavController().navigateUp() }
             ivMenu.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
+            ivBackBtn.setOnClickListener { findNavController().navigateUp() }
             ivShare.setOnClickListener { shareClick() }
             tvPlShare.setOnClickListener { shareClick() }
-            tvPlEdit.setOnClickListener { println("PL edit") }
             tvPlDelete.setOnClickListener { playlistDelConfirm() }
+            tvPlEdit.setOnClickListener {
+                findNavController().navigate(
+                    resId = R.id.action_playlistFragment_to_editPlaylistFragment,
+                    args = EditPlaylistFragment.createArguments(viewmodel.screenState.value!!.playlist)
+                )
+            }
         }
     }
 
