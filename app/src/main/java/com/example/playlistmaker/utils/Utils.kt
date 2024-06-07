@@ -20,11 +20,21 @@ fun String.toIntList(): ArrayList<Int> {
 }
 
 fun Int.toTracksCount(): String {
-    val preLastDigit = this % 100 / 10;
+    val preLastDigit = this % 100 / 10
     if (preLastDigit == 1) return "$this треков"
     return when (this % 10) {
         1 -> "$this трек"
         2,3,4 -> "$this трека"
         else -> "$this треков"
+    }
+}
+
+fun Int.toTracksLength(): String {
+    val preLastDigit = this % 100 / 10
+    if (preLastDigit == 1) return "$this минут"
+    return when (this % 10) {
+        1 -> "$this минута"
+        2,3,4 -> "$this минуты"
+        else -> "$this минут"
     }
 }

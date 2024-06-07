@@ -19,6 +19,7 @@ import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.Constants.Companion.PLAYLIST_ID
 import com.example.playlistmaker.utils.toTracksCount
+import com.example.playlistmaker.utils.toTracksLength
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,7 +62,7 @@ class PlaylistFragment : Fragment() {
                 binding.tvPlaylistTitle.text = title
                 binding.tvPlaylistTitleBS.text = title
                 binding.tvDescription.text = description
-                binding.tvLength.text = getString(R.string.minutes_end, screenState.tracksLength)
+                binding.tvLength.text = screenState.tracksLength.toTracksLength()
                 binding.tvTracksCount.text = count.toTracksCount()
                 binding.tvTrackCountBS.text = count.toTracksCount()
                 if (poster == null) {
