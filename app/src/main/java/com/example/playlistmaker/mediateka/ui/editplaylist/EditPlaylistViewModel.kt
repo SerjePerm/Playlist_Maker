@@ -3,18 +3,20 @@ package com.example.playlistmaker.mediateka.ui.editplaylist
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mediateka.domain.PlaylistsInteractor
 import com.example.playlistmaker.mediateka.domain.models.Playlist
+import com.example.playlistmaker.mediateka.ui.addplaylist.AddPlaylistViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EditPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
+class EditPlaylistViewModel(
+    private val playlistsInteractor: PlaylistsInteractor
+) : AddPlaylistViewModel(playlistsInteractor) {
 
     //Screen state
     private val _screenState = MutableLiveData<EditPlaylistScreenState>()
-    val screenState: LiveData<EditPlaylistScreenState> = _screenState
+    val state: LiveData<EditPlaylistScreenState> = _screenState
 
     init {
         _screenState.value = EditPlaylistScreenState()
@@ -48,16 +50,16 @@ class EditPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor
         }
     }
 
-    fun changeTitle(title: String) {
+    override fun changeTitle(title: String) {
         _screenState.value = _screenState.value?.copy(title = title)
         _screenState.value = _screenState.value?.copy(isTitleNotEmpty = title.isNotBlank())
     }
 
-    fun changeDescription(description: String) {
+    override fun changeDescription(description: String) {
         _screenState.value = _screenState.value?.copy(description = description)
     }
 
-    fun changeUri(uri: Uri) {
+    override fun changeUri(uri: Uri) {
         _screenState.value = _screenState.value?.copy(poster = uri)
     }
 

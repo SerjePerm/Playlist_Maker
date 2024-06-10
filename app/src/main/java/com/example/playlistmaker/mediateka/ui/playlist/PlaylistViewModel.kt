@@ -50,14 +50,14 @@ class PlaylistViewModel(
 
     fun sharePlaylist() {
         val pl = _screenState.value!!.playlist
-        var text = ""
-        text += pl.title + "\n"
-        text += pl.description + "\n"
-        text += pl.count.toTracksCount() + "\n"
+        val text = StringBuilder("")
+        text.append(pl.title + "\n")
+        text.append(pl.description + "\n")
+        text.append(pl.count.toTracksCount() + "\n")
         _screenState.value!!.trackList.forEachIndexed { index, track ->
-            text += "${index+1}.${track.artistName} - ${track.trackName} (${track.trackTime})\n"
+            text.append("${index+1}.${track.artistName} - ${track.trackName} (${track.trackTime})\n")
         }
-        sharingInteractor.shareText(text)
+        sharingInteractor.shareText(text.toString())
     }
 
     fun delTrack(track: Track) {

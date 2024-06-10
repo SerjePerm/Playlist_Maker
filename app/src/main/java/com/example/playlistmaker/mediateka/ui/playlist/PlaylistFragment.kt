@@ -63,6 +63,8 @@ class PlaylistFragment : Fragment() {
                 binding.tvPlaylistTitleBS.text = title
                 binding.tvDescription.text = description
                 binding.tvLength.text = screenState.tracksLength.toTracksLength()
+                //binding.tvLength.text = resources.getQuantityString(
+                //    R.plurals.minutes, screenState.tracksLength, screenState.tracksLength)
                 binding.tvTracksCount.text = count.toTracksCount()
                 binding.tvTrackCountBS.text = count.toTracksCount()
                 if (poster == null) {
