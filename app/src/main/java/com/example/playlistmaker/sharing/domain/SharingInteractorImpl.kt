@@ -13,5 +13,9 @@ class SharingInteractorImpl(private val sharingData: SharingData) : SharingInter
     override fun userLicense() {
         sharingData.userLicense()
     }
-    
+
+    override fun shareText(text: String) {
+        sharingData.shareText(text)
+    }
+
 }

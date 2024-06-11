@@ -56,7 +56,8 @@
             style="@style/TextEditStyle"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:hint="@string/title" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +75,8 @@
             android:id="@+id/etDescription"
             style="@style/TextEditStyle"
             android:layout_width="match_parent"
-            android:layout_height="56dp" />
+            android:layout_height="56dp"
+            android:hint="@string/description" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

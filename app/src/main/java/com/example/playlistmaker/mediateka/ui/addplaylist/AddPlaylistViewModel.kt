@@ -10,7 +10,7 @@ import com.example.playlistmaker.mediateka.domain.models.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
+open class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
 
     //Screen state
     private val _screenState = MutableLiveData<AddPlaylistScreenState>()
@@ -34,18 +34,18 @@ class AddPlaylistViewModel(private val playlistsInteractor: PlaylistsInteractor)
         }
     }
 
-    fun changeTitle(title: String) {
+    open fun changeTitle(title: String) {
         _screenState.value = _screenState.value?.copy(title = title)
         _screenState.value = _screenState.value?.copy(isTitleNotEmpty = title.isNotBlank())
         checkChanges()
     }
 
-    fun changeDescription(description: String) {
+    open fun changeDescription(description: String) {
         _screenState.value = _screenState.value?.copy(description = description)
         checkChanges()
     }
 
-    fun changeUri(uri: Uri) {
+    open fun changeUri(uri: Uri) {
         _screenState.value = _screenState.value?.copy(uri = uri)
         checkChanges()
     }

@@ -22,9 +22,9 @@ class RootActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bnvBottomNav.setupWithNavController(navController)
         //show/hide bottom nav
+        val hideList = listOf(R.id.playerFragment, R.id.addPlaylistFragment, R.id.playlistFragment)
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
-            binding.bnvBottomNav.isVisible =
-                !(navDestination.id == R.id.playerFragment || navDestination.id == R.id.addPlaylistFragment)
+            binding.bnvBottomNav.isVisible = !hideList.contains(navDestination.id)
         }
     }
 

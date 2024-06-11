@@ -23,11 +23,15 @@ class ImagesRepositoryImpl(private val context: Context) : ImagesRepository {
         if (!filePath.exists()) { filePath.mkdirs() }
         val filename = SimpleDateFormat("yyyy.MM.dd_HH.mm.ss").format(Date()) + ".jpg"
         val file = File(filePath, filename)
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        try{
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val outputStream = FileOutputStream(file)
+            BitmapFactory
+                .decodeStream(inputStream)
+                .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        } catch (e: Exception) {
+            println("ImagesRepository saving file: ${file.toURI()} error: ${e.message}")
+        }
         return filename
     }
 

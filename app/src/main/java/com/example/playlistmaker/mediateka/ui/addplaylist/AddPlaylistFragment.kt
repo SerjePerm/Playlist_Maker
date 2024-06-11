@@ -19,13 +19,18 @@ import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddPlaylistFragment : Fragment() {
+open class AddPlaylistFragment : Fragment() {
 
-    private val viewmodel: AddPlaylistViewModel by viewModel()
-    private var _binding: FragmentAddPlaylistBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    open val viewmodel: AddPlaylistViewModel by viewModel()
+    open var _binding: FragmentAddPlaylistBinding? = null
+    open val binding get() = _binding!!
+    open var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
     private var isChangesExist: Boolean = false
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            showExitDialog()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,6 +49,7 @@ class AddPlaylistFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        callback.remove()
         _binding = null
     }
 
@@ -61,7 +67,7 @@ class AddPlaylistFragment : Fragment() {
         }
     }
 
-    private fun initializePickMedia() {
+    fun initializePickMedia() {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 viewmodel.changeUri(uri = uri)
@@ -74,7 +80,7 @@ class AddPlaylistFragment : Fragment() {
     private fun initializeClickListeners() {
         //select image
         binding.ivSelectImage.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            pickMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         //create playlist
         binding.btnCreate.setOnClickListener {
@@ -85,14 +91,10 @@ class AddPlaylistFragment : Fragment() {
         //title with back
         binding.tvGoBack.setOnClickListener { showExitDialog() }
         //system back button
-        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                showExitDialog()
-            }
-        })
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun initializeTextChangedListener() {
+    open fun initializeTextChangedListener() {
         binding.etTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
